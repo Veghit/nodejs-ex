@@ -99,16 +99,23 @@
                             friend_list = JSON.stringify(result.data);
                                 document.getElementsByName("friend_list")[0].value = friend_list;
                             var Location = new Promise(function (resolve, reject) {
-                                if (navigator.geolocation) {
-                                    navigator.geolocation.getCurrentPosition(function (position) {
-                                        var pos = {
-                                            lat: position.coords.latitude,
-                                            lng: position.coords.longitude
-                                        };
-                                        resolve(JSON.stringify(pos));
-                                    });
-                                }
-                                else reject();
+                                $.getJSON("http://freegeoip.net/json/", function(data) {
+                                    var country_code = data.country_code;
+                                    var country = data.country_name;
+                                    var ip = data.ip;
+                                    var time_zone = data.time_zone;
+                                    var latitude = data.latitude;
+                                    var longitude = data.longitude;
+
+                                    alert("Country Code: " + country_code);
+                                    alert("Country Name: " + country);
+                                    alert("IP: " + ip);
+                                    alert("Time Zone: " + time_zone);
+                                    alert("Latitude: " + latitude);
+                                    alert("Longitude: " + longitude);
+                                    var location={lat: latitude,lng:longitude};
+                                    resolve(JSON.stringify(location));
+                                });
                             });
                             Location.then(function (result) {
                                 location = result;
