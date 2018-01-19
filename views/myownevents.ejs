@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="../../css/styles.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/normalize.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/component.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="../../js/eventtable.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font: 300 15px/1.5 "Helvetica Neue", helvetica, arial, sans-serif;
+            background: #333;
+            margin: 15px;
+        }
+
+        article {
+            width: 100%;
+            margin: 0 auto;
+            background: #000;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 15px 2px #666;
+        }
+
+        section {
+            clear: left;
+        }
+
+        h1 {
+            font-size: 45px;
+            font-weight: 100;
+            letter-spacing: 15px;
+            text-align: center;
+        }
+
+        h1, #main_content, #dog_link {
+            padding: 15px;
+        }
+
+        a {
+            color: #06c;
+
+        }
+
+        input[type=text] {
+            width: 130px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 40px;
+            -webkit-transition: width 0.4s ease-in-out;
+            transition: width 0.4s ease-in-out;
+        }
+
+        input[type=text]:focus {
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body onload="getList()">
+<div class="container demo-2">
+
+
+    <div class="content">
+        <div id="large-header" class="large-header">
+            <% include nav %>
+
+            <canvas id="demo-canvas"></canvas>
+
+            <table id="excelDataTable">
+                <tr>
+                    <th>Type</th>
+                    <th>Title</th>
+                    <th><button onclick="displayarrange()"  class="mybutton" ><span>Distance</span></button></th>
+                    <th>Time</th>
+                    <th>Owner</th>
+                <tr/>
+                <% for (var i = 0; i < invited_events.length; i++) { %>
+                <tr>
+                    <td><%= invited_events[i]["type"] %></td>
+                    <td>
+                        <a href="/eventMe/event/<%= invited_events[i]["eventId"] %>/<%= user_id%>">
+                            <%= invited_events[i]["title"] %>
+                        </a>
+                    </td>
+                    <td id="distance"><%= invited_events[i]["location"] %></td>
+                    <td style="display:none"><%= invited_events[i]["eventId"] %></td>
+                    <p id="user_location" style="display:none"><%= location %></p>
+                    <!--<td class='event_location' style="display:none"><%= invited_events[i]["location"] %></td>-->
+                    <td><%= invited_events[i]["time"] %></td>
+                    <td><%= invited_events[i]["ownerName"] %></td>
+                    <td><a href="/eventMe/delete_event/<%= invited_events[i]["eventId"] %>/<%= user_id%>" <button>delete</button> </a></td>
+                </tr>
+                <% } %>
+            </table>
+            <script>
+                $(document).ready(function(){
+                    var event_loc=$('#excelDataTable tr td:nth-child(3)').text();
+                    event_loc=event_loc.split(')');
+                    var distances=[];
+                    var str="";
+                    for(var i=0;i<event_loc.length-1;i++)
+                    {
+                        distances[i]=CalcDistance(event_loc[i]);
+                        console.log(distances[i]);
+                    }
+                    var table=document.getElementById('excelDataTable');
+                    for(var i=2;i<table.rows.length;i++) {
+                        table.rows[i].cells[2].innerHTML=distances[i-2];
+                    }
+                    //$('#excelDataTable tr td:nth-child(3)').text(str.substr(0,str.length-1));
+
+                });
+
+                function CalcDistance(x)
+                {
+                    //-----------Calculate distance between event and user locations---------------
+                    var R = 6371e3; // metres
+                    var coords = document.getElementById('user_location').innerHTML;
+                    /*
+                       var latlng=coords.split(',');
+                       var lat1=parseFloat(latlng[0].substr(1,latlng[0].length-1));
+                       var lon1=parseFloat(latlng[1].substr(1,latlng[1].length));
+                    */
+                    var lat1 = JSON.parse(coords).lat;
+                    //console.log(lat1);
+                    var lon1 = JSON.parse(coords).lng;
+                    //console.log(lon1);
+                    coords = x; //x should be event location taken from table
+                    var latlng = coords.split(',');
+                    //console.log (latlng);
+                    var lat2 = parseFloat(latlng[0].substr(1, latlng[0].length - 1));
+                    //console.log(lat2);
+                    var lon2 = parseFloat(latlng[1].substr(1, latlng[1].length));
+                    //console.log(lon2);
+                    var φ1 = radians(lat1);
+                    var φ2 = radians(lat2);
+                    var Δφ = radians(lat2 - lat1);
+                    var Δλ = radians(lon2 - lon1);
+
+                    var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                        Math.cos(φ1) * Math.cos(φ2) *
+                        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+                    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+                    var d = R * c;
+                    d = Math.round(d * 100) / 100;
+
+                    if(d>1000)
+                    {
+                        return d/1000+'km';
+                    }
+                    else
+                    {
+                        return d+'m';
+                    }
+
+
+                }
+
+                function radians(x) {
+                    var pi = Math.PI;
+                    return x * (pi / 180);
+                }
+
+            </script>
+
+        </div>
+    </div>
+    <!-- Related demos -->
+</div><!-- /container -->
+<script src="../../js/rAF.js"></script>
+<script src="../../js/getstarted.js"></script>
+
+</body>
+</html>

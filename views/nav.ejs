@@ -1,0 +1,156 @@
+
+<nav id="main_nav">
+    <div id='cssmenu'>
+    <ul>
+        <li>
+            <a style="opacity: 1;">Events</a>
+            <ul>
+                <li><a href="/eventMe/frontpage/<%= user_id %>">Home</a></li>
+                <li><a href="/eventMe/createevent/<%= user_id %>">Create Event</a></li>
+                <li><a href="/eventMe/myownevents/<%= user_id %>">My Own Events</a></li>
+                <li><a href="/eventMe/eventsiattend/<%= user_id %>">Events I Attend</a></li>
+            </ul>
+        </li>
+        <li>
+            <a>Starts At</a>
+            <ul>
+                <li>
+                    <a>Date</a>
+                    <ul>
+                        <li><input id="date" type="date" style="width:100%"></input></li>
+                    </ul>
+                </li>
+                <li>
+                    <a>Time</a>
+                    <ul>
+                        <li><input id="time" type="time" style="width:100%"></input></li>
+                    </ul>
+                </li>
+                <li>
+                    <button onclick="displaytime()">Get Time</button>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a>Activity Type</a>
+            <ul>
+                <li><input onclick="boxChecked();" name="Food" type="checkbox"
+                       id="checkbox">Food</input>
+                    <ul>
+                        <li><input onclick="boxChecked();" name="Food_Mexican" type="checkbox"
+                                   id="checkbox">Mexican</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Food_Hamburger" type="checkbox"
+                                   id="checkbox">Hamburger</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Food_Italian" type="checkbox"
+                                   id="checkbox">Italian</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Food_Israeli" type="checkbox"
+                                   id="checkbox">Israeli</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Food_Sushi" type="checkbox"
+                                   id="checkbox">Sushi</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Food_Viatnamise" type="checkbox"
+                                   id="checkbox">Viatnamise</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Food_Chinese" type="checkbox"
+                                   id="checkbox">Chinese</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Food_Other" type="checkbox"
+                                   id="checkbox">Other</input></li>
+                    </ul>
+                </li>
+
+                <li><input onclick="boxChecked();" name="Party" type="checkbox"
+                            id="checkbox">Party</input>
+                    <ul>
+                        <li><input onclick="boxChecked($(this));" name="Party_Techno" type="checkbox"
+                                   id="checkbox">Techno</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Party_Salsa" type="checkbox"
+                                   id="checkbox">Salsa</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Party_MainStream" type="checkbox"
+                                   id="checkbox">Main-Stream</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Party_Other" type="checkbox"
+                                   id="checkbox">Other</input></li>
+                    </ul>
+                </li>
+                <li><input onclick="boxChecked();" name="Shopping" type="checkbox"
+                           id="checkbox">Shopping</input>
+                    <ul>
+                        <li><input onclick="boxChecked($(this));" name="Shopping_Groceries" type="checkbox"
+                                   id="checkbox">Groceries</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Shopping_Clothes" type="checkbox"
+                                   id="checkbox">Clothes</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Shoppinf_HomeDecore" type="checkbox"
+                                   id="checkbox">Home Decore</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Shoppinf_Other" type="checkbox"
+                                   id="checkbox">Other</input></li>
+                    </ul>
+                </li>
+                <li><input onclick="boxChecked();" name="Entertainment" type="checkbox"
+                           id="checkbox">Entertainment</input>
+                    <ul>
+                        <li><input onclick="boxChecked($(this));" name="Entertainment_Movie" type="checkbox"
+                                   id="checkbox">Movie</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Entertainment_Theater" type="checkbox"
+                                   id="checkbox">Theater</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Entertainment_Concert" type="checkbox"
+                                   id="checkbox">Concert</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Entertainment_Stand_up_show" type="checkbox"
+                                   id="checkbox">Stand-up show</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Entertainment_Other" type="checkbox"
+                                   id="checkbox">Other</input></li>
+                    </ul>
+                </li>
+                <li><input onclick="boxChecked();" name="Sports" type="checkbox"
+                           id="checkbox">Sports</input>
+                    <ul>
+                        <li><input onclick="boxChecked($(this));" name="Sports_Soccer" type="checkbox"
+                                   id="checkbox">Soccer</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Sports_Basketball" type="checkbox"
+                                   id="checkbox">Basketball</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Sports_Football" type="checkbox"
+                                   id="checkbox">Football</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Sports_Handball" type="checkbox"
+                                   id="checkbox">Handball</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Sports_Tennis" type="checkbox"
+                                   id="checkbox">Tennis</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Sports_Jogging" type="checkbox"
+                                   id="checkbox">Jogging</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Sports_Training" type="checkbox"
+                                   id="checkbox">Training at the gym</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Sports_Athletics" type="checkbox"
+                                   id="checkbox">Athletics</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Sports_Other" type="checkbox"
+                                   id="checkbox">Other</input></li>
+                    </ul>
+                </li>
+                <li><input onclick="boxChecked();" name="Adventure" type="checkbox"
+                           id="checkbox">Adventure</input>
+                    <ul>
+                        <li><input onclick="boxChecked($(this));" name="Adventure_Hiking" type="checkbox"
+                                   id="checkbox">Hiking</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Adventure_Road_trip" type="checkbox"
+                                   id="checkbox">Road-trip</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Adventure_Diving" type="checkbox"
+                                   id="checkbox">Diving</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Adventure_Ski" type="checkbox"
+                                   id="checkbox">Ski</input></li>
+                        <li><input onclick="boxChecked($(this));" name="Adventure_Other" type="checkbox"
+                                   id="checkbox">Other</input></li>
+                    </ul>
+                </li>
+                <li><input onclick="boxChecked($(this));" name="Other" type="checkbox"
+                           id="checkbox">Other</input></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">Search</a>
+            <ul>
+                <li><input type="text" id="txt_name" name="search" placeholder="Search.."
+                           style="width: 100%;"></input>
+                    <button onclick="displaysearch()">Submit</button>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a style="background-color: red;" href="/eventMe/createevent/<%= user_id %>">Create Event</a>
+        </li>
+    </ul>
+    </div>
+</nav>
