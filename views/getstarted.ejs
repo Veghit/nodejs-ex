@@ -108,12 +108,17 @@
                                         resolve(JSON.stringify(pos));
                                     });
                                 }
+                                else reject();
                             });
                             Location.then(function (result) {
                                 location = result;
                                 document.getElementsByName("location")[0].value = location;
                                 //document.getElementsByName("location")[0].value = '('+location.lat+','+location.lng);
                                 document.getElementById("user_info").submit();
+                            });
+                            Location.catch(function()
+                            {
+                                window.alert('Error fetching your location');
                             });
                         });
                     });
