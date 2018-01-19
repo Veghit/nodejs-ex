@@ -187,7 +187,7 @@ router.get('/myOwnEvents/:fb_id', (req, res) => {
                     .then(events_array => {
                         console.log('these are the user full events array:');
                         console.log(events_array);
-                        res.render('myOwnEvents', {
+                        res.render('myownevents', {
                             invited_events: events_array,
                             user_id: fb_id,
                             location: user[0].current_location
