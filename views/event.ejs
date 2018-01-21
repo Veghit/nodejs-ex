@@ -1,40 +1,258 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" type="text/css" href="../../../css/styles.css"/>
     <link rel="stylesheet" type="text/css" href="../../../css/normalize.css"/>
     <link rel="stylesheet" type="text/css" href="../../../css/component.css"/>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet"
+          type="text/css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+    <!--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
+    <!--<link rel="stylesheet" type="text/css" media="screen"-->
+          <!--href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">-->
+
 
     <script>
-        var coords;
+        var coordinates = [];
         var map;
-        $(document).ready(function () {
-            //----- PARSE COORDIANTES INTO ADDRESS ---------
-            var coordinates = document.getElementById("location").innerHTML;
-            var latlng = coordinates.substring(1, coordinates.length - 1);
-            coords = latlng.split(" ");
-            latlng = coords[0] + coords[1];
-            var xmlHttp = new XMLHttpRequest();
-            var url = "https:maps.googleapis.com/maps/api/geocode/json?latlng=" + latlng + "&key=AIzaSyCu3KurWBoVaFCgz3J6jjoYcnmIVY2i6B0";
-            xmlHttp.open("GET", url, true);
-            xmlHttp.onreadystatechange = function () {
-                if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                    var address = JSON.parse(xmlHttp.responseText).results[0].formatted_address;
-                    document.getElementById('location-premable').style = "display:block";
-                    document.getElementById('location').innerHTML = address;
-                    document.getElementById('location').style = "display:block";
+        var addresses = [];
+        var LocationsPoll = [];
+        var TimePoll = [];
+        var FreePoll = [];
+
+
+        function search(array,x)
+        {
+            for(var i=0;i<array.length;i++)
+            {
+                console.log(JSON.stringify(array[i]));
+                console.log(JSON.stringify(x));
+                if(JSON.stringify(array[i])==x)
+                    return true;
+            }
+            return false;
+
+        }
+
+        function Vote(type,vote) {
+            var user_id = document.getElementById("user_id").innerHTML;
+            var going_users = document.getElementById("going_ids").innerHTML;
+            var event_id = document.getElementById('event_id').innerHTML;
+            var poll;
+            var pollNum;
+            console.log(going_users);
+            if (going_users == "") {
+                window.alert("If you wish to vote, you must first confirm your attendance");
+            }
+            else {
+                going_users = JSON.parse('[' + going_users + ']');
+                if (search(going_users, user_id)) {
+                    if (type == "Location") {
+                        poll = LocationsPoll;
+                        pollNum = 1;
+                    }
+                    else if (type == "Date&Time") {
+                        poll = TimePoll;
+                        if (LocationUnderPoll())
+                            pollNum = 2;
+                        else pollNum = 1;
+                    }
+                    else {
+                        poll = FreePoll;
+                        pollNum = parseInt(document.getElementById('poll-counter').innerHTML);
+                    }
+                    console.log(poll);
+                    if (poll.votedUsers == undefined || !search(poll.votedUsers, user_id)) {
+                        document.getElementById('myVote').value=vote;
+                        document.getElementById('pollNum').value=pollNum;
+                        $('#poll_data').submit();
+                    }
+                    else {
+                        if (window.confirm('You have already voted for this poll. Would you like to change your vote?')) {
+                            document.getElementById('myVote').value=vote;
+                            document.getElementById('pollNum').value=pollNum;
+                            $('#poll_data').submit();
+                        }
+                    }
+
+                }
+                else {
+                    console.log("here");
+                    window.alert("If you wish to vote, you must first confirm your attendance");
                 }
             }
-            xmlHttp.send();
+
+        }
+
+        function CenterMap(i) {
+            var coords = LocationsPoll.options[i].option.split(" ");
+            //window.alert(coords);
+            var _lat = parseFloat(coords[0].split(",")[0].substring(1));
+            var _lng = parseFloat(coords[1].substring(0, coords[1].length - 1));
+            var pos = {lat: _lat, lng: _lng};
+            map.setCenter(pos);
+        }
+
+        function CreateTooltip(i, type,vote) {
+            var str = "";
+            if (type == "Location") {
+                var func = 'CenterMap(' + i + ')';
+                str += '<div style="position: relative; transition: 5s; hover:">' +
+                    '<a onclick=' + func + '>View on map</a>'
+                '</div>'
+            }
+            str += '<div><a onclick=\'Vote("' + type+'","'+vote + '")\'>Vote!</a></div>';
+            console.log(str);
+            return str;
+        }
+
+        ///---INITALIZE POLLS----
+        $(document).ready(function () {
+            var i = 0;
+            if (document.getElementById('location').innerHTML == "") {
+                console.log(JSON.parse(document.getElementById('polls').innerHTML));
+                LocationsPoll = JSON.parse(document.getElementById('polls').innerHTML)[i];
+                i++;
+                //console.log(LocationsPoll);
+                document.getElementById('location').innerHTML = "Location is under poll. Click here to view."
+                document.getElementById('location').onclick = function () {
+                    var addr = [];
+                    for (var j = 0; j < addresses.length; j++) {
+                        var t = [];
+                        //console.log(temp[j]);
+                        t.push(addresses[j]);
+                        //t.push(Math.round(Math.random()*10));
+                        t.push(LocationsPoll.options[j].votes);
+                        t.push(getRandomColor());
+                        t.push(CreateTooltip(j, "Location",addresses[j]));
+                        addr.push(t);
+                    }
+                    PollChart(addr, 'Location');
+                    ShowPollResults();
+                };
+            }
+            if (document.getElementById('event-time').innerHTML == "When: ") {
+                TimePoll = JSON.parse(document.getElementById('polls').innerHTML)[i];
+                var tabledata = [];
+                for (var j = 0; j < TimePoll.options.length; j++) {
+                    var t = [];
+                    t.push(TimePoll.options[j].option);
+                    t.push(TimePoll.options[j].votes);
+                    t.push(getRandomColor());
+                    t.push(CreateTooltip(j, "Time&Date",TimePoll.options[j].option));
+                    tabledata.push(t);
+                }
+                i++;
+                //console.log(TimePoll);
+                document.getElementById('event-time').style = "display:none";
+                console.log(TimePoll);
+                $("<a id='time-poll-msg'>Time&Date is under poll. Click here to view.</a>").insertBefore($('#event-type'));
+                $('#time-poll-msg').click(function () {
+                    PollChart(tabledata, 'Date-time');
+                    ShowPollResults();
+                });
+            }
+            if (parseInt(document.getElementById('poll-counter').innerHTML) > i) {
+                $('<a id="free-poll">Open-question poll ongoing.Click here to view.</a>').insertBefore($('#close-chart'));
+                var tabledata = [];
+                FreePoll = JSON.parse(document.getElementById('polls').innerHTML)[i];
+                for (var j = 0; j < FreePoll.options.length; j++) {
+                    var t = [];
+                    t.push(FreePoll.options[j].option);
+                    t.push(FreePoll.options[j].votes);
+                    t.push(getRandomColor());
+                    t.push(CreateTooltip(j, "Other",FreePoll.options[j].option));
+                    tabledata.push(t);
+                }
+                i++;
+                $('#free-poll').click(function () {
+                    PollChart(tabledata, 'Other');
+                    ShowPollResults();
+                });
+            }
         });
 
+
+        ///----CONTROL CHART DIV----
+        function ShowPollResults() {
+            var chart = document.getElementById('google-chart');
+            var close = document.getElementById('close-chart');
+            chart.style = "display:block";
+            close.style = "display:block";
+            close.onclick = function () {
+                chart.style = "display:none";
+                close.style = 'display:none';
+            };
+            //console.log(chart);
+            //console.log(close);
+        }
+
+        //----CHECK IF LOCATION IS POLLED----
+        function LocationUnderPoll() {
+            return (document.getElementById('location').innerHTML == "Location is under poll. Click here to view.");
+        }
+
+
+        ///----TRANSLATE COORDS INTO ADDRESSES-----
+        $(document).ready(function () {
+            //----- PARSE COORDIANTES INTO ADDRESS ---------
+            if (!LocationUnderPoll()) {
+                coordinates.push(document.getElementById("location").innerHTML + " ");
+                //window.alert(coordinates);
+            }
+            else {
+                //console.log(document.getElementById('polls'));
+                for (i = 0; i < LocationsPoll.options.length; i++) {
+                    coordinates.push(LocationsPoll.options[i].option);
+                }
+                //window.alert(coordinates);
+                //window.alert(coordinates.length);
+            }
+            var i = 0;
+            //console.log(coordinates);
+            coordinates.forEach(function (item, index) {
+                var latlng = item.substring(1, coordinates[i].length - 3);
+                //window.alert(latlng);
+                var coords = latlng.split(" ");
+                //window.alert(coords);
+                latlng = coords[0] + coords[1];
+                //window.alert(latlng);
+                var xmlHttp = new XMLHttpRequest();
+                var url = "https:maps.googleapis.com/maps/api/geocode/json?latlng=" + latlng + "&key=AIzaSyCu3KurWBoVaFCgz3J6jjoYcnmIVY2i6B0";
+                xmlHttp.open("GET", url, true);
+                xmlHttp.onreadystatechange = function () {
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                        var address = JSON.parse(xmlHttp.responseText).results[0].formatted_address;
+                        //window.alert(address);
+                        document.getElementById('location-premable').style = "display:block";
+                        document.getElementById('location').style = "display:block";
+                        if (!LocationUnderPoll()) {
+                            document.getElementById('location').innerHTML = address;
+                        }
+                        else {
+                            addresses.push(address);
+                        }
+                    }
+                }
+                xmlHttp.send();
+            });
+            //console.log(addresses);
+        });
+
+
+        ///----CONTROL GOOGLE MAP DIV---
         function OpenMap() {
             // Get the modal
             var modal = document.getElementById('maps-modal');
@@ -63,21 +281,106 @@
         function initMap(event) {
             $(document).ready(function () {
                 // ----- MAP CREATION -------
-                var _lat = parseFloat(coords[0].split(",")[0]);
-                var _lng = parseFloat(coords[1]);
+                var coords = coordinates[0].split(" ");
+                //window.alert(coords);
+                var _lat = parseFloat(coords[0].split(",")[0].substring(1));
+                var _lng = parseFloat(coords[1].substring(0, coords[1].length - 1));
                 var default_location = {lat: _lat, lng: _lng};
                 map = new google.maps.Map(document.getElementById('googleMap'), {
                     zoom: 15,
                     center: default_location,
                 });
 
-                //---MARKER CREATION ----
-                var marker = new google.maps.Marker({
-                    position: default_location,
-                    map: map,
+                coordinates.forEach(function (item, index) {
+                    //---MARKER CREATION ----
+                    var coords = item.split(" ");
+                    var _lat = parseFloat(coords[0].split(",")[0].substring(1));
+                    var _lng = parseFloat(coords[1].substring(0, coords[1].length - 1));
+                    var default_location = {lat: _lat, lng: _lng};
+                    //console.log(default_location);
+                    var marker = new google.maps.Marker({
+                        position: default_location,
+                        map: map,
+                    });
+                    marker.setMap(map);
                 });
-                marker.setMap(map);
             });
+        }
+
+
+        ////----GOOGLE CHARTS - DISPLAY CHART WITH POLL RESULTS ------
+        function PollChart(x, type) {
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', {'packages': ['corechart']});
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(drawChart);
+            console.log(x);
+
+            // Set chart options
+            var title;
+            var tooltips = [];
+            if (type == "Location") {
+                title = LocationsPoll.poll_question;
+
+            }
+            else if (type == "Date-time") {
+                title = TimePoll.poll_question;
+            }
+            else if (type == "Other") {
+                title = FreePoll.poll_question;
+            }
+
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            function drawChart() {
+
+                // Create the data table.
+                var dataarray = [];
+                dataarray.push(['Option', 'Votes', {role: 'style'}, {
+                    'type': 'string',
+                    'role': 'tooltip',
+                    'p': {'html': true}
+                }]);
+                x.forEach(function (item) {
+                    dataarray.push(item);
+                });
+
+                var data = new google.visualization.arrayToDataTable(dataarray);
+
+
+                //Set options
+                var options = {
+                    'title': title,
+                    'width': 400,
+                    'height': 300,
+                    'bar': {groupWidth: "95%"},
+                    'legend': {position: "none"},
+                    'tooltip': {
+                        isHtml: true,
+                        trigger: 'both'
+                    },
+                    'focusTarget': 'category',
+                    'backgroundColor': 'transparent'
+                };
+
+
+                var chart = new google.visualization.ColumnChart(document.getElementById('google-chart'));
+
+
+                // Instantiate and draw our chart, passing in some options.
+                chart.draw(data, options);
+            }
+        }
+
+        function getRandomColor() {
+            var letters = '0123456789abcdef';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
 
 
@@ -137,84 +440,100 @@
 <div class="container demo-2">
     <div class="content">
         <div id="large-header" class="large-header">
+            <% include createeventbar %>
 
-            <% include nav %>
+            <div style="height:615px;width:800px;background-color:#eee;overflow:auto;margin-right: auto;margin-left:auto; margin-top: 0px;">
+                <table id="singleEventTable" style="position:relative;width: 735px; border-width: 0;text-align: center;">
+                    <colgroup>
+                        <col width="15%"/>
+                        <col width="15%"/>
+                        <col width="70%"/>
+                    </colgroup>
+                    <tr style=" border-width: 0">
+                        <td colspan=2 style="border-width: 0;"><img height=200px, width=300px
+                                                                    src="/img/<%= event_img %>">
+                        </td>
+                        <td style="border-width: 0;">
+                            <div id="maps-modal" class="modal" style="display:none">
 
-            <canvas id="demo-canvas"></canvas>
-
-            <table id="singleEventTable" style="height: 500px; width: 735px; background-color:#f9f1e9;border-width: 0;
-            bottom: 200px; left: 50%; text-align: center; margin-left:auto; margin-right: auto; overflow-y: scroll;">
-                <colgroup>
-                    <col width="15%"/>
-                    <col width="15%"/>
-                    <col width="70%"/>
-                </colgroup>
-                <tr style="background-color:#f9f1e9;border-width: 0">
-                    <td colspan=2 style="border-width: 0;"><img height=200px, width=300px
-                                                                src="/img/<%= event_img %>">
-                    </td>
-                    <td style="border-width: 0;">
-                        <!-- Google Maps modal-->
-                        <div id="maps-modal" class="modal" style="display:none">
-                            <!-- Modal content -->
-                            <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <div id="googleMap"></div>
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+                                    <div id="googleMap"></div>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr style="height: 124px;background-color:#f9f1e9;border-width: 0">
-                    <td style="text-align:center;border-width: 0;">
-                        <h4 style="color:black;weight:bold;">Join event<br/></h4>
-                        <a style="border-width: 5px;border-color: #222222;"
-                           href="/eventMe/joinEvent/<%= event_id %>/<%= user_id %>">
-                            <img height=50px, onClick='alert("You have joined: <%= title %> ")' width=50px
-                                 src="../../../img\tick.png"/>
-                        </a>
-                    </td>
-                    <td style="text-align:center;border-width: 0;">
-                        <h4 style="color:black;weight:bold;">Leave event<br/></h4>
-                        <a href="/eventMe/unattend/<%= event_id %>/<%= user_id %>">
-                            <img height=50px, onClick='alert("You have left: <%= title %> ")' ,width=50px
-                                 src="../../../img\x.png"/>
-                        </a>
-                    </td>
-                    <td style="border-width: 0;">
+                        </td>
+                    </tr>
+                    <tr style="height: 124px;border-width: 0" >
+                        <td style="text-align:center;border-width: 0;">
+                            <h4 style="color:black;weight:bold;">Join event<br/></h4>
+                            <a style="border-width: 5px;border-color: #222222;"
+                               href="/eventMe/joinEvent/<%= event_id %>/<%= user_id %>">
+                                <img height=50px, onClick='alert("You have joined: <%= title %> ")' width=50px
+                                     src="../../../img\tick.png"/>
+                            </a>
+                        </td>
+                        <td style="text-align:center;border-width: 0;">
+                            <h4 style="color:black;weight:bold;">Leave event<br/></h4>
+                            <a href="/eventMe/unattend/<%= event_id %>/<%= user_id %>">
+                                <img height=50px, onClick='alert("You have left: <%= title %> ")' ,width=50px
+                                     src="../../../img\x.png"/>
+                            </a>
+                        </td>
+                        <td id='event-info' style="border-width: 0;">
                         <span style="color:black">
                         <span style="text-align:center;color:black"><H3>
                                 <%= title %>
                             </H3></span>
-                        <p>When: <%= event_time %></p>
-                        <p>What: <%= event_type %></p>
+                        <p id="event-time">When: <%= event_time %></p>
+                        <p id="event-type">What: <%= event_type %></p>
                                                     <p id="location-premable" style="display: none"><a id="location" style="display: none"
-                                                                                                             onclick="OpenMap()"><%= event_place %></a>
+                                                                                                       onclick="OpenMap()"><%= event_place %></a>
                         </p>
+
                         </span>
-                    </td>
-                </tr>
-                <tr style="height: 124px;background-color:#f9f1e9;border-color: #f9f1e9">
-                    <td colspan=2 style="border-width: 0; color:black;">&nbsp;
-                        <h3>Going: <br/></h3>
-                        <% for (let i = 0; i < going_users.length; i++) { %>
-                        <%= going_users[i] %><br/>
-                        <% } %>
-                        <h3>Invited: <br/></h3>
-                        <% for (let i = 0; i < invited_users.length; i++) { %>
-                        <%= invited_users[i] %><br/>
-                        <% } %>
-                    </td>
-                    <td style="border-width: 0;width: 466.889px; height: 124px;">&nbsp;
-                        <p><span style="color:black">
+                            <button id="close-chart" style="display:none">Close</button>
+                            <div id="google-chart" style="display:none"></div>
+                        </td>
+                        <td style="display:none" id="polls"><%= pollArray %></td>
+                    </tr>
+                    <tr style="height: 124px; border-color: #f9f1e9">
+                        <td colspan=2 style="border-width: 0; color:black;">&nbsp;
+                            <h3>Going: <br/></h3>
+                            <% for (let i = 0; i < going_users.length; i++) { %>
+                            <%= going_users[i] %><br/>
+                            <% } %>
+                            <h3>Invited: <br/></h3>
+                            <% for (let i = 0; i < invited_users.length; i++) { %>
+                            <%= invited_users[i] %><br/>
+                            <% } %>
+                        </td>
+                        <td style="border-width: 0;width: 466.889px; height: 124px;">&nbsp;
+                            <p><span style="color:black">
                             <%= event_desc %>
                         </span></p>
 
-                    </td>
-                </tr>
+                        </td>
+                        <p id="poll-counter" style="display:none"><%= pollCounter %></p>
+                        <p id="going_ids" style="display:none"><%= going_ids %></p>
+                        <p id="user_id" style="display:none"><%= user_id %></p>
+                        <p id="event_id" style="display:none"><%= event_id %>
 
-            </table>
+                        <form id="poll_data" action="/eventMe/vote/<%= user_id%>" method="POST" style="display:none">
+                            <input name="user_id" value=<%=user_id%> />
+                            <input name="event_id" value=<%=event_id%> />
+                            <input name="pollNum" id="pollNum"/>
+                            <input name="myVote" id="myVote"/>
+                        </form>
+
+
+                    </tr>
+
+                </table>
+            </div>
+
 
         </div>
+
     </div>
 
 </div>

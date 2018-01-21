@@ -6,24 +6,35 @@ function getList(){
         myList[row]={
             "Type" : $(tr).find('td:eq(0)').text(),
             "Title" : $(tr).find('td:eq(1)').text(),
-            "Distance" :$(tr).find('td:eq(2)').text(),
+            "Distance" : $(tr).find('td:eq(2)').text(),
             "Time" :$(tr).find('td:eq(4)').text(),
             "Owner" :$(tr).find('td:eq(5)').text(),
             "Event Id" :$(tr).find('td:eq(3)').text()
         }
     });
+    for (var listIndex = 2; listIndex < myList.length; listIndex++) {
+        var tmpDistance = readyForDistance(myList[listIndex]["Distance"]);
+        myList[listIndex]["Distance"] = tmpDistance;
+
+    }
     return myList;
 }
 function boxChecked() {
     var myCurrentList = [];
     var numberchecked = 0;
+    var alreadyIn = [];
     $('input[type=checkbox]').each(function () {
         if (this.checked) {
             numberchecked += 1;
             var x = this.name;
             for (var listIndex = 0; listIndex < myList.length; listIndex++) {
-                if (myList[listIndex]["Type"] == x) {
-                    myCurrentList.push(myList[listIndex]);
+                var event_types=myList[listIndex]["Type"].split(',');
+                for (var typesIndex = 0; typesIndex < event_types.length; typesIndex++) {
+                    if (event_types[typesIndex] == x && alreadyIn.indexOf(listIndex) == -1) {
+                        myCurrentList.push(myList[listIndex]);
+                        alreadyIn.push(listIndex);
+                        break;
+                    }
                 }
             }
         }
@@ -57,7 +68,7 @@ function displayarrange() {
     }
     for (var listIndextmpsec = 0; listIndextmpsec < newArrangeList.length; listIndextmpsec++) {
         if (typeof(newArrangeList[listIndextmpsec]["Distance"]) === 'number') {
-            newArrangeList[listIndextmpsec]["Distance"] = newArrangeList[listIndextmpsec]["Distance"].toString() + 'km';
+            newArrangeList[listIndextmpsec]["Distance"] = newArrangeList[listIndextmpsec]["Distance"];
         }
     }
     $("#excelDataTable tr").remove();
@@ -87,11 +98,17 @@ function displaytime() {
 
 function displaysearch() {
     var myCurrentList = [];
+    var alreadyIn = [];
     var x = $("#txt_name").val();
     if (x != "") {
         for (var listIndex = 0; listIndex < myList.length; listIndex++) {
-            if (myList[listIndex]["Type"] == x) {
-                myCurrentList.push(myList[listIndex]);
+            var event_types=myList[listIndex]["Type"].split(',');
+            for (var typesIndex = 0; typesIndex < event_types.length; typesIndex++) {
+                if (event_types[typesIndex] == x && alreadyIn.indexOf(listIndex) == -1) {
+                    myCurrentList.push(myList[listIndex]);
+                    alreadyIn.push(listIndex);
+                    break;
+                }
             }
         }
     }
@@ -161,4 +178,52 @@ function addAllColumnHeaders(myList, selector) {
     $(selector).append(headerTr$);
 
     return columnSet;
+}
+
+function readyForDistance(x){
+    var event_loc=x;
+    event_loc=event_loc.split(')');
+    return CalcDistance(event_loc[0]);
+}
+
+function CalcDistance(x)
+{
+    //-----------Calculate distance between event and user locations---------------
+    var R = 6371e3; // metres
+    var coords = document.getElementById('user_location').innerHTML;
+    /*
+       var latlng=coords.split(',');
+       var lat1=parseFloat(latlng[0].substr(1,latlng[0].length-1));
+       var lon1=parseFloat(latlng[1].substr(1,latlng[1].length));
+    */
+    var lat1 = JSON.parse(coords).lat;
+    //console.log(lat1);
+    var lon1 = JSON.parse(coords).lng;
+    //console.log(lon1);
+    coords = x; //x should be event location taken from table
+    var latlng = coords.split(',');
+    //console.log (latlng);
+    var lat2 = parseFloat(latlng[0].substr(1, latlng[0].length - 1));
+    //console.log(lat2);
+    var lon2 = parseFloat(latlng[1].substr(1, latlng[1].length));
+    //console.log(lon2);
+    var φ1 = radians(lat1);
+    var φ2 = radians(lat2);
+    var Δφ = radians(lat2 - lat1);
+    var Δλ = radians(lon2 - lon1);
+
+    var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+        Math.cos(φ1) * Math.cos(φ2) *
+        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    var d = R * c;
+    d = Math.round(d * 100) / 100;
+
+    return (parseInt(d/100))/10 +'km';
+}
+
+function radians(x) {
+    var pi = Math.PI;
+    return x * (pi / 180);
 }

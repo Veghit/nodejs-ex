@@ -19,20 +19,16 @@
     <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <style>
         /* The Modal (background) */
-        .modal {
+        #myModal {
             display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            left: 30%;
-            top: 20%;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            width: 60%; /* Full width */
-            height: 60%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0); /* Fallback color */
+
         }
         /* Modal Content */
         .modal-content {
@@ -40,7 +36,7 @@
             margin: auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
+            width: 45%;
         }
 
         /* The Close Button */
@@ -100,19 +96,13 @@
                                 document.getElementsByName("friend_list")[0].value = friend_list;
                             var Location = new Promise(function (resolve, reject) {
                                 $.getJSON("http://freegeoip.net/json/", function(data) {
-                                    var country_code = data.country_code;
+                                    /*var country_code = data.country_code;
                                     var country = data.country_name;
                                     var ip = data.ip;
-                                    var time_zone = data.time_zone;
+                                    var time_zone = data.time_zone;*/
                                     var latitude = data.latitude;
                                     var longitude = data.longitude;
 
-                                    alert("Country Code: " + country_code);
-                                    alert("Country Name: " + country);
-                                    alert("IP: " + ip);
-                                    alert("Time Zone: " + time_zone);
-                                    alert("Latitude: " + latitude);
-                                    alert("Longitude: " + longitude);
                                     var location={lat: latitude,lng:longitude};
                                     resolve(JSON.stringify(location));
                                 });
@@ -125,8 +115,9 @@
                             });
                             Location.catch(function()
                             {
-                                window.alert('Error fetching your location');
+                               window.alert('Error fetching your location');
                             });
+
                         });
                     });
                 }
@@ -161,27 +152,24 @@
             <!-- Trigger/Open The Modal -->
             <button id="myBtn" class="main-title">Get Started</button>
 
-            <!-- The Modal -->
-            <div style="background-color:White; text-align: center; position: absolute; margin-left:auto; margin-right:auto; width:700px; height:auto;" id="myModal" class="modal">
 
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <!-- Facebook login -->
-                    <a id="fb_login" style="display: none" onclick="return FBLogin()"><img src="../../img/FB_login.png"></a>
-                    <!-- Checkbox -->
-                    <form action="">
-                        <input type="checkbox" id="cb"><br>I accept sharing my location
-                    </form>
-                    <form id="user_info" action="/eventMe/newUser" method="POST">
-                        <input type="hidden" name="fb_id"/>
-                        <input type="hidden" name="f_name"/>
-                        <input type="hidden" name="friend_list"/>
-                        <input type="hidden" name="location"/>
-                    </form>
-                </div>
 
-            </div>
+                        <!-- Modal content-->
+                        <div class="modal-content" id="myModal" style="background-color:White;">
+                            <div class="modal-body">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <a id="fb_login" style="display: none; width: 100%;" onclick="return FBLogin()"><img src="../../img/FB_login.png"></a>
+                                <form action="">
+                                    <label class="checkbox-inline" style="width: 150px"><input id="cb" style="width: 20px" type="checkbox" value="">Share My Location</label>
+                                </form>
+                                <form id="user_info" action="/eventMe/newUser" method="POST">
+                                    <input type="hidden" name="fb_id"/>
+                                    <input type="hidden" name="f_name"/>
+                                    <input type="hidden" name="friend_list"/>
+                                    <input type="hidden" name="location"/>
+                                </form>
+                            </div>
+                        </div>
 
             <script>
                 // Get the modal
@@ -212,14 +200,6 @@
             </script>
         </div>
     </div>
-    <!-- Related demos -->
-    <section class="related">
-        <p>About Us</p>
-        <h3>Who Are We?</h3>
-        </a>
-        <h3>What's That App?</h3>
-        </a>
-    </section>
 </div><!-- /container -->
 <script src="../../js/rAF.js"></script>
 <script src="../../js/getstarted.js"></script>
