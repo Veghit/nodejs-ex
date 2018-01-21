@@ -12,6 +12,7 @@ const fs = require('fs');
 
 
 var server;
+var unsecureServer;
 
 class WebServer {
 
@@ -30,13 +31,15 @@ class WebServer {
             cert: fs.readFileSync('keys/cert.pem')
         };
 
+        unsecureServer = http.createServer(app);
         server = https.createServer(options,app);
 
         /**
          * Listen on provided port, on all network interfaces.
          */
-
-        server.listen(port);
+        unsecureServer.listen(port);
+        server.listen(port+1);
+        console.log('HTTP:'+port+ ', HTTPS:'+(port+1));
         server.on('error', this.onError);
         server.on('listening', this.onListening);
 
