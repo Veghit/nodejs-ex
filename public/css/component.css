@@ -10,7 +10,7 @@
 }
 
 .demo-1 .large-header {
-    background-image: url('../img/0.jpg');
+    background-image: url('../img/3.jpg');
 }
 
 .demo-2 .large-header {
@@ -86,8 +86,8 @@
     height: 50%;
     margin: 0;
     padding: 0;
-    overflow-y: scroll;
-    overflow-x: scroll;
+    overflow-y: auto;
+    overflow-x: auto;
     display: inline-block;
     position: absolute;
     background-color: transparent;

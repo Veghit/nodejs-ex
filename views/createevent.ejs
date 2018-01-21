@@ -1,714 +1,735 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
-	<head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
-        <meta name="viewport" content="width=device-width, initial-scale=1"> 
-        <meta name="description" content="Examples for creative website header animations using Canvas and JavaScript" />
-        <meta name="keywords" content="header, canvas, animated, creative, inspiration, javascript" />
-        <meta name="author" content="Codrops" />
-        <link rel="shortcut icon" href="../../favicon.ico">
-        <link rel="stylesheet" type="text/css" href="../../css/normalize.css" />
-        <link rel="stylesheet" type="text/css" href="../../css/styles.css"/>
-        <link rel="stylesheet" type="text/css" href="../../css/component.css" />
-        <link href='http://fonts.googleapis.com/css?family=Raleway:200,400,800|Londrina+Outline' rel='stylesheet' type='text/css'>
-        <!--[if IE]>
-        	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" media="screen"
-        href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Examples for creative website header animations using Canvas and JavaScript"/>
+    <meta name="keywords" content="header, canvas, animated, creative, inspiration, javascript"/>
+    <meta name="author" content="Codrops"/>
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../css/normalize.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/styles.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/component.css"/>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:200,400,800|Londrina+Outline' rel='stylesheet'
+          type='text/css'>
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
 
-        <style>
-            .center{
-                margin:auto;
-                padding:150px 0;
-                width:50%;
-            }
-            #googleMap
-            {
-                width:100%;
-                height:400px;
-            }
+    <style>
+        .center {
+            margin: auto;
+            padding: 150px 0;
+            width: 50%;
+        }
 
+        #googleMap {
+            width: 100%;
+            height: 400px;
+        }
 
-            #event-properties ul {
-                background: white;
-                float: left;
-                -webkit-transition: .5s;
-                transition: .5s;
-            }
+        #event-properties ul {
+            background: white;
+            float: left;
+            -webkit-transition: .5s;
+            transition: .5s;
+        }
 
-            #event-properties li {
-                float: left;
-                position: relative;
-                width: 120px;
-                list-style: none;
-                -webkit-transition: .5s;
-                transition: .5s;
-            }
+        #event-properties li {
+            float: left;
+            position: relative;
+            width: 120px;
+            list-style: none;
+            -webkit-transition: .5s;
+            transition: .5s;
+        }
 
-            #event-properties > ul > li > a, h1 {
-                text-transform: uppercase;
-            }
+        #event-properties > ul > li > a, h1 {
+            text-transform: uppercase;
+        }
 
-            #event-properties a {
-                display: block;
-                text-decoration: none;
-                padding: 5px 15px;
-                color: #000;
-            }
+        #event-properties a {
+            display: block;
+            text-decoration: none;
+            padding: 5px 15px;
+            color: #000;
+        }
 
-            #event-properties ul ul {
-                position: absolute;
-                left: 75%;
-                top: 0;
-                visibility: hidden;
-                opacity: 0;
-            }
+        #event-properties ul ul {
+            position: absolute;
+            left: 75%;
+            top: 0;
+            visibility: hidden;
+            opacity: 0;
+        }
 
-            #event-properties ul ul ul {
-                left: 100%;
-                top: 0;
-            }
+        #event-properties ul ul ul {
+            left: 100%;
+            top: 0;
+        }
 
-            #event-properties ul ul ul ul{
-                left: 100%;
-                top: 0;
-            }
+        #event-properties ul ul ul ul {
+            left: 100%;
+            top: 0;
+        }
 
-            #event-properties li:hover {
-                background: #ddd;
-            }
+        #event-properties li:hover {
+            background: #ddd;
+        }
 
-            #event-properties li li:hover {
-                background: #bbb;
-            }
+        #event-properties li li:hover {
+            background: #bbb;
+        }
 
-            #event-properties li li li:hover {
-                background: #bbb;
-            }
+        #event-properties li li li:hover {
+            background: #bbb;
+        }
 
-            #event-properties li li li:hover {
-                background: #999;
-            }
+        #event-properties li li li:hover {
+            background: #999;
+        }
 
-            #event-properties li li li li:hover {
-                background: #999;
-            }
+        #event-properties li li li li:hover {
+            background: #999;
+        }
 
-            #event-properties li:hover > ul {
-                visibility: visible;
-                opacity: 1;
-            }
-        </style>
-	</head>
-	<body>
-		<div class="container demo-2">
-            <div class="content">
-                <div id="large-header" class="large-header">
-                    <% include createeventbar %>
-                    <div id="event-properties" class="center" ><!--event creation form-->
-                    <form id="event-form" style="background-color:#eee;
-            top: 50%; left: 50%;margin-left:auto; margin-right: auto; overflow-y: scroll; padding: 10px" action="/eventMe/addOpenEvent/<%=user_id%>" method="post">
+        #event-properties li:hover > ul {
+            visibility: visible;
+            opacity: 1;
+        }
 
-                        Activity name:
-                        <input type="text" name="Activity_name"/><br>
-                        <p id="time-polled" style="display:inline-block">Date and time:</p><input type="datetime-local" name="Activity_time" id="event-time" style="display:inline-block"/>
-                        <br>
-                        Location: <p id="location-polled" style="display:inline">(Current location will be taken as default)</p>
-                        <input type="button" id="Activity_location" value="Click here" onclick="ChooseLocation()"/>
+        .pac-container {
+            background-color: #FFF;
+            z-index: 20;
+            position: fixed;
+            display: inline-block;
+            float: left;
+        }
 
-                        <!--Polls-->
-                        &nbsp;&nbsp;&nbsp; <input type="button" id="poll" onclick="Poll()" value="Poll!"/>
-                        <div id="poll-modal" style="display:none">
-                            <div class="modal-content">
-                                <!--<span class="close">&times;</span>-->
-                                <div id="poll">
-                                    <input type="checkbox" id="location-cb">Location</input><br>
-                                    <div>
-                                        <input type="button" id='location-options' onclick="ChooseLocation()" style="display:none" value="Choose Locations"/>
-                                        <input type="hidden" id="locations-list"/>
-                                    </div>
-                                    <input type="checkbox" id="time-cb">Time&Date</input>
-                                    <div id="time-options"></div>
-                                    <input type="checkbox" id="free-poll-cb">Another</input>
-                                    <div id="free-poll-options" style="display: none;">
-                                        Poll Question:<input type="text" id="free-poll-question"/><br>
-                                        Options: <br>
-                                        <input type="text" name="free-poll-option"/><br>
-                                        <input type="text" name="free-poll-option"/><br>
-                                        <input type="button" id="free-poll-button" onclick="AddFreePollOptions()" value="Add more options!"/>
+        .modal {
+            z-index: 20;
+        }
 
-                                    </div>
+        .modal-backdrop {
+            z-index: 10;
+        }
+
+        ​
+    </style>
+</head>
+<body>
+<div class="container demo-2">
+    <div class="content">
+        <div id="large-header" class="large-header">
+            <% include createeventbar %>
+            <div id="event-properties" class="center"><!--event creation form-->
+                <form id="event-form" style="background-color:#eee;
+            top: 50%; left: 50%;margin-left:auto; margin-right: auto; overflow-y: scroll; padding: 10px"
+                      action="/eventMe/addOpenEvent/<%= user_id %>" method="post">
+
+                    Activity name:
+                    <input type="text" name="Activity_name"/><br>
+                    <p id="time-polled" style="display:inline-block">Date and time:</p><input type="datetime-local"
+                                                                                              name="Activity_time"
+                                                                                              id="event-time"
+                                                                                              style="display:inline-block"/>
+                    <br>
+                    Location: <p id="location-polled" style="display:inline">(Current location will be taken as
+                        default)</p>
+                    <input type="button" id="Activity_location" value="Click here" onclick="ChooseLocation()"/>
+
+                    <!--Polls-->
+                    &nbsp;&nbsp;&nbsp; <input type="button" id="poll" onclick="Poll()" value="Poll!"/>
+                    <div id="poll-modal" style="display:none">
+                        <div class="modal-content">
+                            <!--<span class="close">&times;</span>-->
+                            <div id="poll">
+                                <input type="checkbox" id="location-cb">Location</input><br>
+                                <div>
+                                    <input type="button" id='location-options' onclick="ChooseLocation()"
+                                           style="display:none" value="Choose Locations"/>
+                                    <input type="hidden" id="locations-list"/>
+                                </div>
+                                <input type="checkbox" id="time-cb">Time&Date</input>
+                                <div id="time-options"></div>
+                                <input type="checkbox" id="free-poll-cb">Another</input>
+                                <div id="free-poll-options" style="display: none;">
+                                    Poll Question:<input type="text" id="free-poll-question"/><br>
+                                    Options: <br>
+                                    <input type="text" name="free-poll-option"/><br>
+                                    <input type="text" name="free-poll-option"/><br>
+                                    <input type="button" id="free-poll-button" onclick="AddFreePollOptions()"
+                                           value="Add more options!"/>
+
                                 </div>
                             </div>
                         </div>
-                        <br>
-
-                        <!-- Google Maps modal-->
-                        <div id="maps-modal" class="modal" style="display:none">
-                            <!-- Modal content -->
-                            <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <input id="pac-input" class="controls" type="text" placeholder="Enter Location Here" style="left:0px"/>
-                                <div id="googleMap"></div>
-                                <input type="text" name="google-location" style="display:none"/>
-                            </div>
-                        </div>
-
-                        Select your activity type:
-                        <input type="button" id="Type_selection" value="Click here" onclick="SelectType()"/>
-                        <br>
-                        <div id="activity-type" style="display: none;">
-                            <ul>
-                                <li><input type="checkbox" id="Food">Food</input>
-                                    <ul>
-                                        <li><input type="checkbox" id="Food_Mexican">Mexican</input></li>
-                                        <li><input type="checkbox" id="Food_Hamburger">Hamburger</input></li>
-                                        <li><input type="checkbox" id="Food_Italian">Italian</input></li>
-                                        <li><input type="checkbox" id="Food_Israeli">Israeli</input></li>
-                                        <li><input type="checkbox" id="Food_Sushi">Sushi</input></li>
-                                        <li><input type="checkbox" id="Food_Viatnamise">Viatnamise</input></li>
-                                        <li><input type="checkbox" id="Food_Chinese">Chinese</input></li>
-                                        <li><input type="checkbox" id="Food_Other">Other</input></li>
-                                    </ul>
-                                </li>
-                                <br>
-                                <li><input type="checkbox" id="Party">Party</input>
-                                    <ul>
-                                        <li><input type="checkbox" id="Party_Techno">Techno</input></li>
-                                        <li><input type="checkbox" id="Party_Salsa">Salsa</input></li>
-                                        <li><input type="checkbox" id="Party_Main-Stream">Main-Stream</input></li>
-                                        <li><input type="checkbox" id="Party_Other">Other</input></li>
-                                    </ul>
-                                </li>
-                                <br>
-                                <li><input type="checkbox" id="Shopping">Shopping</input>
-                                    <ul>
-                                        <li><input type="checkbox" id="Shopping_Groceries">Groceries</input></li>
-                                        <li><input type="checkbox" id="Shopping_Clothes">Clothes</input></li>
-                                        <li><input type="checkbox" id="Shopping_HomeDecore">Home Decore</input></li>
-                                        <li><input type="checkbox" id="Shopping_Other">Other</input></li>
-                                    </ul>
-                                </li>
-                                <br>
-                                <li><input type="checkbox" id="Entertainment">Entertainment</input>
-                                    <ul>
-                                        <li><input type="checkbox" id="Entertainment_Movie">Movie</input></li>
-                                        <li><input type="checkbox" id="Entertainment_Theater">Theater</input></li>
-                                        <li><input type="checkbox" id="Entertainment_Concert">Concert</input></li>
-                                        <li><input type="checkbox" id="Entertainment_Stand_up_show">Stand-up show</input></li>
-                                        <li><input type="checkbox" id="Entertainment_Other">Other</input></li>
-
-                                    </ul>
-                                </li>
-                                <br>
-                                <li><input type="checkbox" id="Sports">Sports</input>
-                                    <ul>
-                                        <li><input type="checkbox" id="Sports_Soccer">Soccer</input></li>
-                                        <li><input type="checkbox" id="Sports_Basketball">Basketball</input></li>
-                                        <li><input type="checkbox" id="Sports_Football">Football</input></li>
-                                        <li><input type="checkbox" id="Sports_Handball">Handball</input></li>
-                                        <li><input type="checkbox" id="Sports_Tennis">Tennis</input></li>
-                                        <li><input type="checkbox" id="Sports_Jogging">Jogging</input></li>
-                                        <li><input type="checkbox" id="Sports_Training">Training at the gym</input></li>
-                                        <li><input type="checkbox" id="Sports_Athletics">Athletics</input></li>
-                                        <li><input type="checkbox" id="Sports_Other">Other</input></li>
-                                    </ul>
-                                </li>
-                                <br>
-                                <li><input type="checkbox" id="Adventure">Adventure</input>
-                                    <ul>
-                                        <li><input type="checkbox" id="Adventure_Hiking">Hiking</input></li>
-                                        <li><input type="checkbox" id="Adventure_Road_trip">Road-trip</input></li>
-                                        <li><input type="checkbox" id="Adventure_Diving">Diving</input></li>
-                                        <li><input type="checkbox" id="Adventure_Ski">Ski</input></li>
-                                        <li><input type="checkbox" id="Adventure_Other">Other</input></li>
-                                    </ul>
-                                </li>
-                                <br>
-                                <li><input type="checkbox" id="Other">Other</input></li>
-                            </ul>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                        </div>
-
-                        <input type="hidden" name="categories"/>
-                        Description (optional):
-                        <input type="text" name="description"/><br>
-                        <!--Picture (optional): (JPG,PNG formats)
-                        <input type="file" name="picture"/><br>-->
-                        <input type="button" id="Create" value="Create!" onclick="CreateEvent()"/>
-                    </form>
                     </div>
-              </div>
+                    <br>
+
+                    <!-- Google Maps modal-->
+                    <div id="maps-modal" class="modal" style="display:none">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <span class="close">Confirm</span>
+                            <input id="pac-input" class="controls" type="text" placeholder="Enter Location Here"
+                                   style="left:0px"/>
+                            <div style="z-index: 1;" id="googleMap"></div>
+                            <input type="text" name="google-location" style="display:none"/>
+                        </div>
+                    </div>
+
+                    Select your activity type:
+                    <input type="button" id="Type_selection" value="Click here" onclick="SelectType()"/>
+                    <br>
+                    <div id="activity-type" style="display: none;">
+                        <ul>
+                            <li><input type="checkbox" id="Food">Food</input>
+                                <ul>
+                                    <li><input type="checkbox" id="Food_Mexican">Mexican</input></li>
+                                    <li><input type="checkbox" id="Food_Hamburger">Hamburger</input></li>
+                                    <li><input type="checkbox" id="Food_Italian">Italian</input></li>
+                                    <li><input type="checkbox" id="Food_Israeli">Israeli</input></li>
+                                    <li><input type="checkbox" id="Food_Sushi">Sushi</input></li>
+                                    <li><input type="checkbox" id="Food_Viatnamise">Viatnamise</input></li>
+                                    <li><input type="checkbox" id="Food_Chinese">Chinese</input></li>
+                                    <li><input type="checkbox" id="Food_Other">Other</input></li>
+                                </ul>
+                            </li>
+                            <br>
+                            <li><input type="checkbox" id="Party">Party</input>
+                                <ul>
+                                    <li><input type="checkbox" id="Party_Techno">Techno</input></li>
+                                    <li><input type="checkbox" id="Party_Salsa">Salsa</input></li>
+                                    <li><input type="checkbox" id="Party_Main-Stream">Main-Stream</input></li>
+                                    <li><input type="checkbox" id="Party_Other">Other</input></li>
+                                </ul>
+                            </li>
+                            <br>
+                            <li><input type="checkbox" id="Shopping">Shopping</input>
+                                <ul>
+                                    <li><input type="checkbox" id="Shopping_Groceries">Groceries</input></li>
+                                    <li><input type="checkbox" id="Shopping_Clothes">Clothes</input></li>
+                                    <li><input type="checkbox" id="Shopping_HomeDecore">Home Decore</input></li>
+                                    <li><input type="checkbox" id="Shopping_Other">Other</input></li>
+                                </ul>
+                            </li>
+                            <br>
+                            <li><input type="checkbox" id="Entertainment">Entertainment</input>
+                                <ul>
+                                    <li><input type="checkbox" id="Entertainment_Movie">Movie</input></li>
+                                    <li><input type="checkbox" id="Entertainment_Theater">Theater</input></li>
+                                    <li><input type="checkbox" id="Entertainment_Concert">Concert</input></li>
+                                    <li><input type="checkbox" id="Entertainment_Stand_up_show">Stand-up show</input>
+                                    </li>
+                                    <li><input type="checkbox" id="Entertainment_Other">Other</input></li>
+
+                                </ul>
+                            </li>
+                            <br>
+                            <li><input type="checkbox" id="Sports">Sports</input>
+                                <ul>
+                                    <li><input type="checkbox" id="Sports_Soccer">Soccer</input></li>
+                                    <li><input type="checkbox" id="Sports_Basketball">Basketball</input></li>
+                                    <li><input type="checkbox" id="Sports_Football">Football</input></li>
+                                    <li><input type="checkbox" id="Sports_Handball">Handball</input></li>
+                                    <li><input type="checkbox" id="Sports_Tennis">Tennis</input></li>
+                                    <li><input type="checkbox" id="Sports_Jogging">Jogging</input></li>
+                                    <li><input type="checkbox" id="Sports_Training">Training at the gym</input></li>
+                                    <li><input type="checkbox" id="Sports_Athletics">Athletics</input></li>
+                                    <li><input type="checkbox" id="Sports_Other">Other</input></li>
+                                </ul>
+                            </li>
+                            <br>
+                            <li><input type="checkbox" id="Adventure">Adventure</input>
+                                <ul>
+                                    <li><input type="checkbox" id="Adventure_Hiking">Hiking</input></li>
+                                    <li><input type="checkbox" id="Adventure_Road_trip">Road-trip</input></li>
+                                    <li><input type="checkbox" id="Adventure_Diving">Diving</input></li>
+                                    <li><input type="checkbox" id="Adventure_Ski">Ski</input></li>
+                                    <li><input type="checkbox" id="Adventure_Other">Other</input></li>
+                                </ul>
+                            </li>
+                            <br>
+                            <li><input type="checkbox" id="Other">Other</input></li>
+                        </ul>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+
+                    <input type="hidden" name="categories"/>
+                    Description (optional):
+                    <input type="text" name="description"/><br>
+                    <!--Picture (optional): (JPG,PNG formats)
+                    <input type="file" name="picture"/><br>-->
+                    <input type="button" id="Create" value="Create!" onclick="CreateEvent()"/>
+                </form>
             </div>
-            <!-- Related demos -->
-		</div><!-- /container -->
-        <script>
-            var map;
-            var markers=[];
-            var location_poll=[];
-            //var location;
-            function ChooseLocation() {
-                // Get the modal
-                var modal = document.getElementById('maps-modal');
+        </div>
+    </div>
+    <!-- Related demos -->
+</div><!-- /container -->
+<script>
+    var map;
+    var markers = [];
+    var location_poll = [];
 
-                // Get the <span> element that closes the modal
-                var span = document.getElementsByClassName("close")[0];
+    //var location;
+    function ChooseLocation() {
+        // Get the modal
+        var modal = document.getElementById('maps-modal');
 
-                // When the user clicks the button, open the modal
-                modal.style.display = "block";
-                google.maps.event.trigger(map,'resize');
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
 
-                // When the user clicks on <span> (x), close the modal
-                span.onclick = function() {
-                    if(LocationPollCheck() && !window.confirm('Save changes?')) {
-                        document.getElementById('locations-list').value="";
-                        location_poll=[];
-                        for(var i=0;i<markers.length;i++)
-                            markers[i].setMap(null);
-                    }
-                    else if(LocationPollCheck())
-                    {
-                        document.getElementById('locations-list').value=JSON.stringify(location_poll);
-                        //.alert(JSON.stringify(location_poll));
-                    }
-                    modal.style.display = "none";
-                }
+        // When the user clicks the button, open the modal
+        modal.style.display = "block";
+        google.maps.event.trigger(map, 'resize');
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            if (LocationPollCheck() && !window.confirm('Save changes?')) {
+                document.getElementById('locations-list').value = "";
+                location_poll = [];
+                for (var i = 0; i < markers.length; i++)
+                    markers[i].setMap(null);
             }
-
-            function SelectType(){
-                //change button label
-                var but=document.getElementById("Type_selection");
-                but.value= (but.value=="Click here") ? "Close list" : "Click here";
-                //toggle list view
-                var list=document.getElementById("activity-type");
-                list.style.display = (list.style.display=="none") ? list.style.display="inline" : list.style.display ="none";
+            else if (LocationPollCheck()) {
+                document.getElementById('locations-list').value = JSON.stringify(location_poll);
+                //.alert(JSON.stringify(location_poll));
             }
+            modal.style.display = "none";
+        }
+    }
 
-            //Google Maps function
-            function initMap(event) {
-                $(document).ready(function () {
-                    // ----- MAP CREATION -------
-                    var default_location = {lat: 51.508742, lng: -0.120850};
-                    map = new google.maps.Map(document.getElementById('googleMap'), {
-                        zoom: 15,
-                        center: default_location,
-                    });
+    function SelectType() {
+        //change button label
+        var but = document.getElementById("Type_selection");
+        but.value = (but.value == "Click here") ? "Close list" : "Click here";
+        //toggle list view
+        var list = document.getElementById("activity-type");
+        list.style.display = (list.style.display == "none") ? list.style.display = "inline" : list.style.display = "none";
+    }
 
-                    //---MARKER CREATION ----
-                    var marker = new google.maps.Marker({
-                        position: default_location,
-                        map: null,
-                        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569'
-                    });
-                    if (!LocationPollCheck()) {
-                        marker.setMap(map);
-                    }
-                    //----- SEARCH BAR CREATION -----
-                    //--creation--
-                    var input = document.getElementById('pac-input');
-                    var searchBox = new google.maps.places.SearchBox(input);
-                    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-                    map.addListener('bounds_changed', function () {
-                        searchBox.setBounds(map.getBounds());
-                    });
+    //Google Maps function
+    function initMap(event) {
+        $(document).ready(function () {
+            // ----- MAP CREATION -------
+            var default_location = {lat: 51.508742, lng: -0.120850};
+            map = new google.maps.Map(document.getElementById('googleMap'), {
+                zoom: 15,
+                center: default_location,
+            });
 
-                    var location_no_poll = document.getElementsByName("google-location")[0];
-
-                    // ------ GET CURRENT LOCATION ------
-                    var Location = new Promise(function (resolve, reject) {
-                        $.getJSON("http://freegeoip.net/json/", function (data) {
-                            /*var country_code = data.country_code;
-                            var country = data.country_name;
-                            var ip = data.ip;
-                            var time_zone = data.time_zone;*/
-                            var latitude = data.latitude;
-                            var longitude = data.longitude;
-
-                            var location = {lat: latitude, lng: longitude};
-                            resolve(location);
-                        });
-                    });
-                    Location.then(function (result) {
-                        //Adjust map
-                        map.setCenter(result);
-                        if (!LocationPollCheck()) {
-                            marker.setPosition(result);
-                            marker.setMap(map);
-                            location_no_poll.value = "(" + result.lat + ", " + result.lng + ')';
-                        }
-                        google.maps.event.trigger(map, "resize");
-                    });
-                        //-------------- CHANGE LOCATION ON CLICK ------
-                        google.maps.event.addListener(map, 'click', function (event) {
-                            var loc = event.latLng;
-                            if(!LocationPollCheck()) {
-                                marker.setPosition(loc);
-                                marker.setMap(map);
-                                location_no_poll.value = loc;
-                                for (i=0; i<markers.length;i++)
-                                {
-                                    markers[i].setMap(null);
-                                }
-                                location_poll=[];
-                            }
-                            else
-                            {
-                                if(window.confirm('Choose this location?')) {
-                                    if(markers.length>16)
-                                        window.alert('You have reached maximal number of locations');
-                                    else{
-                                    var newMarker = new google.maps.Marker({
-                                        position: loc,
-                                        map: map,
-                                        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
-                                    });
-                                    markers.push(newMarker);
-                                    marker.setMap(null);
-                                    location_no_poll.value="";
-                                    location_poll.push(loc+" ");
-                                }
-                            }}
-                            map.setCenter(loc);
-                            google.maps.event.trigger(map, "resize");
-                        });
-
-                        //-------------- SEARCH BAR HANDLING --------------------
-                        //--response to user choice--
-                        //var markers = [];
-                        searchBox.addListener('places_changed', function () {
-                            var places = searchBox.getPlaces();
-                            if (places.length == 0) {
-                                return;
-                            }
-                            //get details of each place
-                            var bounds = new google.maps.LatLngBounds();
-                            places.forEach(function (place) {
-                                if (!place.geometry) {
-                                    console.log("Returned place contains no geometry");
-                                    return;
-                                }
-                                // Create a marker for each place.
-                                if(LocationPollCheck()) {
-                                    if (window.confirm('Choose this location?')) {
-                                        if(markers.length>16)
-                                            window.alert('You have reached maximal number of locations');
-                                        else{
-                                        markers.push(new google.maps.Marker({
-                                            map: map,
-                                            icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
-                                            title: place.name,
-                                            position: place.geometry.location
-
-                                        }));
-                                        marker.setMap(null);
-                                        location_poll.push(place.geometry.location+" ");
-                                        location_no_poll.value="";
-                                    }}
-                                }
-                                else {
-                                    marker.setPosition(place.geometry.location);
-                                    marker.setMap(map);
-                                    location_no_poll.value = place.geometry.location;
-                                    location_poll.value="";
-                                    for (i=0; i<markers.length;i++)
-                                    {
-                                        markers[i].setMap(null);
-                                    }
-                                }
-                                map.setCenter(place.geometry.location);
-                                if (place.geometry.viewport) {
-                                    // Only geocodes have viewport.
-                                    bounds.union(place.geometry.viewport);
-                                } else {
-                                    bounds.extend(place.geometry.location);
-                                }
-                            });
-                            map.fitBounds(bounds);
-                        });
-                    });
+            //---MARKER CREATION ----
+            var marker = new google.maps.Marker({
+                position: default_location,
+                map: null,
+                icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569'
+            });
+            if (!LocationPollCheck()) {
+                marker.setMap(map);
             }
+            //----- SEARCH BAR CREATION -----
+            //--creation--
+            var input = document.getElementById('pac-input');
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            map.addListener('bounds_changed', function () {
+                searchBox.setBounds(map.getBounds());
+            });
 
-            function handleLocationError()
-            {
-                window.alert("We have a problem fetching your location.Please check it and try again later.");
-            }
+            var location_no_poll = document.getElementsByName("google-location")[0];
 
-            function LocationPollCheck()
-            {
-                return ($('#location-cb').is(':checked'));
-            }
+            // ------ GET CURRENT LOCATION ------
+            var Location = new Promise(function (resolve, reject) {
+                $.getJSON("http://freegeoip.net/json/", function (data) {
+                    /*var country_code = data.country_code;
+                    var country = data.country_name;
+                    var ip = data.ip;
+                    var time_zone = data.time_zone;*/
+                    var latitude = data.latitude;
+                    var longitude = data.longitude;
 
-            function Poll()
-            { // Get the modal
-                var modal = document.getElementById('poll-modal');
-                var button=document.getElementById('poll');
-
-                // When the user clicks the button, open the modal
-                modal.style.display = (modal.style.display=="none") ? "block" : "none";
-                button.value= (button.value=="Poll!") ? "Close" : "Poll!";
-
-
-
-                $(document).ready(function() {
-                    $("#location-cb").click(function () {
-                            $("#Activity_location").toggle(!this.checked);
-                            p=document.getElementById('location-polled');
-                            p.innerHTML= (p.innerHTML=="Under poll") ? "(Current location will be taken as default)" : "Under poll";
-                            $('#location-options').toggle(this.checked);
-                        }
-                    )
-                    $('#time-cb').click(function(){
-                        $('#event-time').toggle(!this.checked);
-                        p=document.getElementById('time-polled');
-                        p.innerHTML= (p.innerHTML=="Date and time: Under poll") ? "Date and time" : "Date and time: Under poll";
-                        $('#time-options').toggle(this.checked);
-                        var add_options=document.getElementById('add-options');
-                        if(add_options==undefined) {
-                            var but = document.createElement('input');
-                            but.type = 'button';
-                            but.onclick = AddDateAndTime;
-                            but.value = 'Add more options!';
-                            but.id = 'add-options';
-                            $('#time-options').append(but);
-                            AddDateAndTime();
-                        }
-                    })
-
-                    $('#free-poll-cb').click(function(){
-                        $('#free-poll-options').toggle(this.checked);
-                    })
-
-
+                    var location = {lat: latitude, lng: longitude};
+                    resolve(location);
                 });
-
-            }
-
-            function AddDateAndTime()
-            {
-                $("<input type=datetime-local name='time-poll-option'/>").insertBefore($('#add-options'));
-                $("<input type=datetime-local name='time-poll-option'/>").insertBefore($('#add-options'));
-            }
-
-            function AddFreePollOptions()
-            {
-                $("<input type=text name='free-poll-option'/>").insertBefore($('#free-poll-button'));
-                $("<br>").insertBefore($('#free-poll-button'));
-            }
-
-
-            function CreateEvent() {
-                var location_under_poll = ($('#location-cb').is(':checked')) ? 1 : 0;
-                var time_under_poll = ($('#time-cb').is(':checked')) ? 1 : 0;
-                var polls_valid = 1; //1 iff polls are valid - at least 2 options
-                var all_fields_set = 1;
-                var polls = [];
-                var query = 'input[name="Activity_name"]';
-                if (!location_under_poll) {
-                    query += ',input[name="google-location"]';
+            });
+            Location.then(function (result) {
+                //Adjust map
+                map.setCenter(result);
+                if (!LocationPollCheck()) {
+                    marker.setPosition(result);
+                    marker.setMap(map);
+                    location_no_poll.value = "(" + result.lat + ", " + result.lng + ')';
                 }
-                if (!time_under_poll)
-                    query += ',input[name="Activity_time"]';
-                //Look up for all elements that aren't optional
-                var form_input = document.querySelectorAll(query);
-                for (i = 0; i < form_input.length; i++) {
-                    //if any of them is empty
-                    if (form_input[i].value == "") {
-                        all_fields_set = 0;
-                       //window.alert(form_input[i].name);
+                google.maps.event.trigger(map, "resize");
+            });
+            //-------------- CHANGE LOCATION ON CLICK ------
+            google.maps.event.addListener(map, 'click', function (event) {
+                var loc = event.latLng;
+                if (!LocationPollCheck()) {
+                    marker.setPosition(loc);
+                    marker.setMap(map);
+                    location_no_poll.value = loc;
+                    for (i = 0; i < markers.length; i++) {
+                        markers[i].setMap(null);
                     }
+                    location_poll = [];
                 }
-
-                //Look for checkboxes,make sure at least one is chekced
-                var cblist = document.querySelectorAll('input[type="checkbox"]:checked');
-                var str = "";
-                for (i = 0; i < cblist.length; i++) {
-                    //concatenate all checked boxes to a string
-                    if (cblist[i].id != "location-cb" && cblist[i].id != "time-cb" && cblist[i].id != "free-poll-cb") {
-                        str += "," + cblist[i].id;
-                    }
-                }
-                document.getElementsByName("categories")[0].value = str.substring(1, str.length);
-
-                if (location_under_poll) {
-                    var locations = document.getElementById('locations-list').value;
-                    var res = JSON.parse(locations);
-                    if (res.length < 2) {
-                        polls_valid = 0;
-                    }
-                }
-
-                if (time_under_poll) {
-                    var all_options = document.getElementsByName('time-poll-option');
-                    if (all_options.length < 2) {
-                        polls_valid = 0;
-                    }
-                    else {
-                        var count = 0;
-                        for (var i = 0; i < all_options.length; i++) {
-                            if (all_options[i] == undefined) {
-                                polls_valid = 0;
-                                break;
-                            }
-                            if (all_options[i].value != "") {
-                                count++;
-                            }
-                            for (var j = i + 1; j < all_options.length; j++) {
-                                if (all_options[j] == undefined) {
-                                    polls_valid = 0;
-                                    break;
-                                }
-                                if (all_options[j].value == all_options[i].value && all_options[i].value != "") {
-                                    window.alert("Poll options must be different!");
-                                    polls_valid = 0;
-                                    break;
-                                }
-                            }
-                        }
-                        if (count < 2) polls_valid = 0;
-                    }
-                }
-
-
-                    if ($('#free-poll-cb').is(':checked')) {
-                        var all_options = document.getElementsByName('free-poll-option');
-                        if (all_options.length < 2) {
-                            polls_valid = 0;
-                        }
+                else {
+                    if (window.confirm('Choose this location?')) {
+                        if (markers.length > 16)
+                            window.alert('You have reached maximal number of locations');
                         else {
-                            var count = 0;
-                            for (var i = 0; i < all_options.length; i++) {
-                                if (all_options[i] == undefined) {
-                                    polls_valid = 0;
-                                    break;
-                                }
-                                if (all_options[i].value != "") {
-                                    count++;
-                                }
-                                for (var j = i + 1; j < all_options.length; j++) {
-                                    if (all_options[j] == undefined) {
-                                        polls_valid = 0;
-                                        break;
-                                    }
-                                    if (all_options[j].value == all_options[i].value && all_options[i].value != "") {
-                                        window.alert("Poll options must be different!");
-                                        polls_valid = 0;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (count < 2) polls_valid = 0;
+                            var newMarker = new google.maps.Marker({
+                                position: loc,
+                                map: map,
+                                icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
+                            });
+                            markers.push(newMarker);
+                            marker.setMap(null);
+                            location_no_poll.value = "";
+                            location_poll.push(loc + " ");
                         }
-                    }
-
-                    //Look up for a picture
-                    /*var file=document.getElementsByName("picture")[0].value;
-                    if(file!="") //If field isn't empty
-                    {
-                        var format=file.split(".")[1];
-                        if(format!="png" && format!="jpg") { //make sure format is okay
-                            window.alert("Picture format is not valid");
-                            all_fields_set = 0;
-                        }
-                    }*/
-
-
-                    //If everything is okay submit form, err otherwise
-                    var poll_questions=[];
-                    if (all_fields_set == 1 && cblist.length > 0 && polls_valid) {
-                        window.alert("Event created successfully!");
-                        var poll_counter = 0;
-                        if ($('#location-cb').is(':checked')) {
-                           // window.alert(JSON.parse(document.getElementById('locations-list').value));
-                            polls.push(JSON.parse(document.getElementById('locations-list').value));
-                            //window.alert(document.getElementById('locations-list').value);
-                            poll_counter++;
-                            poll_questions.push("Where should we go?");
-                        }
-
-                        if ($('#time-cb').is(':checked')) {
-                            var options = document.getElementsByName('time-poll-option');
-                            var values = [];
-                            for (var i = 0; i < options.length; i++)
-                                if (options[i].value != "")
-                                    values.push(options[i].value);
-                            polls.push(values);
-                            poll_counter++;
-                            poll_questions.push("When is the best time for us?");
-                        }
-
-                        if ($('#free-poll-cb').is(':checked')) {
-                            var options = document.getElementsByName('free-poll-option');
-                            var values = [];
-                            for (var i = 0; i < options.length; i++)
-                                if (options[i].value != "")
-                                    values.push(options[i].value);
-                            polls.push(values);
-                            poll_questions.push(document.getElementById('free-poll-question').value);
-                            poll_counter++;
-                        }
-                        var poll_1_length= (polls[0]==undefined) ? 0 : polls[0].length;
-                        var poll_2_length= (polls[1]==undefined) ? 0 :polls[1].length;
-                        var poll_3_length= (polls[2]==undefined) ? 0 :polls[2].length;
-
-                        var poll_1 = JSON.stringify(polls[0]);
-                        var poll_2 = JSON.stringify(polls[1]);
-                        var poll_3 = JSON.stringify(polls[2]);
-                        console.log(polls);
-                        console.log(poll_1);
-                        console.log(poll_2);
-                        console.log(poll_3);
-
-                        $("<input type='hidden' name='poll1' value='" + poll_1 + "' />").insertBefore($('#Create'));
-                        $("<input type='hidden' name='poll2' value='" + poll_2 + "' />").insertBefore($('#Create'));
-                        $("<input type='hidden' name='poll3' value='" + poll_3 + "' />").insertBefore($('#Create'));
-                        $("<input type='hidden' name='poll1_length' value='" + poll_1_length + "' />").insertBefore($('#Create'));
-                        $("<input type='hidden' name='poll2_length' value='" + poll_2_length + "' />").insertBefore($('#Create'));
-                        $("<input type='hidden' name='poll3_length' value='" + poll_3_length + "' />").insertBefore($('#Create'));
-                        $("<input type='hidden' name='poll1_question' value='" + poll_questions[0] + "' />").insertBefore($('#Create'));
-                        $("<input type='hidden' name='poll2_question' value='" + poll_questions[1] + "' />").insertBefore($('#Create'));
-                        $("<input type='hidden' name='poll3_question' value='" + poll_questions[2] + "' />").insertBefore($('#Create'));
-                        $('<input type="hidden" name="poll_counter" value="' + poll_counter + '"/>').insertBefore($('#Create'));
-
-                        document.getElementById("event-form").submit();
-                    }
-                    else if (polls_valid) {
-                        window.alert("Please fill all non-optional fields.");
-                    }
-                    else {
-                        window.alert("Polls require at least 2 options");
                     }
                 }
-        </script>
-        <!-- Import Google Maps -->
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCu3KurWBoVaFCgz3J6jjoYcnmIVY2i6B0&libraries=places&callback=initMap"></script>
-        <!--Import jQuery-->
-        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="../../js/TweenLite.min.js"></script>
-        <script src="../../js/EasePack.min.js"></script>
-        <script src="../../js/rAF.js"></script>
-        <script src="../../js/getstarted.js"></script>
-        <script type="text/javascript"
-         src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
-        </script> 
-        <script type="text/javascript"
-         src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
-        </script>
-        <script type="text/javascript"
-         src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
-        </script>
-        <script type="text/javascript"
-         src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js">
-        </script>
-	</body>
+                map.setCenter(loc);
+                google.maps.event.trigger(map, "resize");
+            });
+
+            //-------------- SEARCH BAR HANDLING --------------------
+            //--response to user choice--
+            //var markers = [];
+            searchBox.addListener('places_changed', function () {
+                var places = searchBox.getPlaces();
+                if (places.length == 0) {
+                    return;
+                }
+                //get details of each place
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function (place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    // Create a marker for each place.
+                    if (LocationPollCheck()) {
+                        if (window.confirm('Choose this location?')) {
+                            if (markers.length > 16)
+                                window.alert('You have reached maximal number of locations');
+                            else {
+                                markers.push(new google.maps.Marker({
+                                    map: map,
+                                    icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
+                                    title: place.name,
+                                    position: place.geometry.location
+
+                                }));
+                                marker.setMap(null);
+                                location_poll.push(place.geometry.location + " ");
+                                location_no_poll.value = "";
+                            }
+                        }
+                    }
+                    else {
+                        marker.setPosition(place.geometry.location);
+                        marker.setMap(map);
+                        location_no_poll.value = place.geometry.location;
+                        location_poll.value = "";
+                        for (i = 0; i < markers.length; i++) {
+                            markers[i].setMap(null);
+                        }
+                    }
+                    map.setCenter(place.geometry.location);
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+        });
+    }
+
+    function handleLocationError() {
+        window.alert("We have a problem fetching your location.Please check it and try again later.");
+    }
+
+    function LocationPollCheck() {
+        return ($('#location-cb').is(':checked'));
+    }
+
+    function Poll() { // Get the modal
+        var modal = document.getElementById('poll-modal');
+        var button = document.getElementById('poll');
+
+        // When the user clicks the button, open the modal
+        modal.style.display = (modal.style.display == "none") ? "block" : "none";
+        button.value = (button.value == "Poll!") ? "Close" : "Poll!";
+
+
+        $(document).ready(function () {
+            $("#location-cb").click(function () {
+                    $("#Activity_location").toggle(!this.checked);
+                    p = document.getElementById('location-polled');
+                    p.innerHTML = (p.innerHTML == "Under poll") ? "(Current location will be taken as default)" : "Under poll";
+                    $('#location-options').toggle(this.checked);
+                }
+            )
+            $('#time-cb').click(function () {
+                $('#event-time').toggle(!this.checked);
+                p = document.getElementById('time-polled');
+                p.innerHTML = (p.innerHTML == "Date and time: Under poll") ? "Date and time" : "Date and time: Under poll";
+                $('#time-options').toggle(this.checked);
+                var add_options = document.getElementById('add-options');
+                if (add_options == undefined) {
+                    var but = document.createElement('input');
+                    but.type = 'button';
+                    but.onclick = AddDateAndTime;
+                    but.value = 'Add more options!';
+                    but.id = 'add-options';
+                    $('#time-options').append(but);
+                    document.getElementById('event-time').value="";
+                    AddDateAndTime();
+                }
+            })
+
+            $('#free-poll-cb').click(function () {
+                $('#free-poll-options').toggle(this.checked);
+            })
+
+
+        });
+
+    }
+
+    function AddDateAndTime() {
+        $("<input type=datetime-local name='time-poll-option'/>").insertBefore($('#add-options'));
+        $("<input type=datetime-local name='time-poll-option'/>").insertBefore($('#add-options'));
+    }
+
+    function AddFreePollOptions() {
+        $("<input type=text name='free-poll-option'/>").insertBefore($('#free-poll-button'));
+        $("<br>").insertBefore($('#free-poll-button'));
+    }
+
+
+    function CreateEvent() {
+        var location_under_poll = ($('#location-cb').is(':checked')) ? 1 : 0;
+        var time_under_poll = ($('#time-cb').is(':checked')) ? 1 : 0;
+        var polls_valid = 1; //1 iff polls are valid - at least 2 options
+        var all_fields_set = 1;
+        var polls = [];
+        var query = 'input[name="Activity_name"]';
+        if (!location_under_poll) {
+            query += ',input[name="google-location"]';
+        }
+        if (!time_under_poll)
+            query += ',input[name="Activity_time"]';
+        //Look up for all elements that aren't optional
+        var form_input = document.querySelectorAll(query);
+        for (i = 0; i < form_input.length; i++) {
+            //if any of them is empty
+            if (form_input[i].value == "") {
+                all_fields_set = 0;
+                //window.alert(form_input[i].name);
+            }
+        }
+
+        //Look for checkboxes,make sure at least one is chekced
+        var cblist = document.querySelectorAll('input[type="checkbox"]:checked');
+        var str = "";
+        for (i = 0; i < cblist.length; i++) {
+            //concatenate all checked boxes to a string
+            if (cblist[i].id != "location-cb" && cblist[i].id != "time-cb" && cblist[i].id != "free-poll-cb") {
+                str += "," + cblist[i].id;
+            }
+        }
+        document.getElementsByName("categories")[0].value = str.substring(1, str.length);
+
+        if (location_under_poll) {
+            var locations = document.getElementById('locations-list').value;
+            var res = JSON.parse(locations);
+            if (res.length < 2) {
+                polls_valid = 0;
+            }
+        }
+
+        if (time_under_poll) {
+            var all_options = document.getElementsByName('time-poll-option');
+            if (all_options.length < 2) {
+                polls_valid = 0;
+            }
+            else {
+                var count = 0;
+                for (var i = 0; i < all_options.length; i++) {
+                    if (all_options[i] == undefined) {
+                        polls_valid = 0;
+                        break;
+                    }
+                    if (all_options[i].value != "") {
+                        count++;
+                    }
+                    for (var j = i + 1; j < all_options.length; j++) {
+                        if (all_options[j] == undefined) {
+                            polls_valid = 0;
+                            break;
+                        }
+                        if (all_options[j].value == all_options[i].value && all_options[i].value != "") {
+                            window.alert("Poll options must be different!");
+                            polls_valid = 0;
+                            break;
+                        }
+                    }
+                }
+                if (count < 2) polls_valid = 0;
+            }
+        }
+
+
+        if ($('#free-poll-cb').is(':checked')) {
+            var all_options = document.getElementsByName('free-poll-option');
+            if (all_options.length < 2) {
+                polls_valid = 0;
+            }
+            else {
+                var count = 0;
+                for (var i = 0; i < all_options.length; i++) {
+                    if (all_options[i] == undefined) {
+                        polls_valid = 0;
+                        break;
+                    }
+                    if (all_options[i].value != "") {
+                        count++;
+                    }
+                    for (var j = i + 1; j < all_options.length; j++) {
+                        if (all_options[j] == undefined) {
+                            polls_valid = 0;
+                            break;
+                        }
+                        if (all_options[j].value == all_options[i].value && all_options[i].value != "") {
+                            window.alert("Poll options must be different!");
+                            polls_valid = 0;
+                            break;
+                        }
+                    }
+                }
+                if (count < 2) polls_valid = 0;
+            }
+        }
+
+        //Look up for a picture
+        /*var file=document.getElementsByName("picture")[0].value;
+        if(file!="") //If field isn't empty
+        {
+            var format=file.split(".")[1];
+            if(format!="png" && format!="jpg") { //make sure format is okay
+                window.alert("Picture format is not valid");
+                all_fields_set = 0;
+            }
+        }*/
+
+
+        //If everything is okay submit form, err otherwise
+        var poll_questions = [];
+        if (all_fields_set == 1 && cblist.length > 0 && polls_valid) {
+            window.alert("Event created successfully!");
+            var poll_counter = 0;
+            if ($('#location-cb').is(':checked')) {
+                // window.alert(JSON.parse(document.getElementById('locations-list').value));
+                polls.push(JSON.parse(document.getElementById('locations-list').value));
+                //window.alert(document.getElementById('locations-list').value);
+                poll_counter++;
+                poll_questions.push("Where should we go?");
+            }
+
+            if ($('#time-cb').is(':checked')) {
+                var options = document.getElementsByName('time-poll-option');
+                var values = [];
+                for (var i = 0; i < options.length; i++)
+                    if (options[i].value != "")
+                        values.push(options[i].value);
+                polls.push(values);
+                poll_counter++;
+                poll_questions.push("When is the best time for us?");
+            }
+
+            if ($('#free-poll-cb').is(':checked')) {
+                var options = document.getElementsByName('free-poll-option');
+                var values = [];
+                for (var i = 0; i < options.length; i++)
+                    if (options[i].value != "")
+                        values.push(options[i].value);
+                polls.push(values);
+                poll_questions.push(document.getElementById('free-poll-question').value);
+                poll_counter++;
+            }
+            var poll_1_length = (polls[0] == undefined) ? 0 : polls[0].length;
+            var poll_2_length = (polls[1] == undefined) ? 0 : polls[1].length;
+            var poll_3_length = (polls[2] == undefined) ? 0 : polls[2].length;
+
+            var poll_1 = JSON.stringify(polls[0]);
+            var poll_2 = JSON.stringify(polls[1]);
+            var poll_3 = JSON.stringify(polls[2]);
+            console.log(polls);
+            console.log(poll_1);
+            console.log(poll_2);
+            console.log(poll_3);
+
+            $("<input type='hidden' name='poll1' value='" + poll_1 + "' />").insertBefore($('#Create'));
+            $("<input type='hidden' name='poll2' value='" + poll_2 + "' />").insertBefore($('#Create'));
+            $("<input type='hidden' name='poll3' value='" + poll_3 + "' />").insertBefore($('#Create'));
+            $("<input type='hidden' name='poll1_length' value='" + poll_1_length + "' />").insertBefore($('#Create'));
+            $("<input type='hidden' name='poll2_length' value='" + poll_2_length + "' />").insertBefore($('#Create'));
+            $("<input type='hidden' name='poll3_length' value='" + poll_3_length + "' />").insertBefore($('#Create'));
+            $("<input type='hidden' name='poll1_question' value='" + poll_questions[0] + "' />").insertBefore($('#Create'));
+            $("<input type='hidden' name='poll2_question' value='" + poll_questions[1] + "' />").insertBefore($('#Create'));
+            $("<input type='hidden' name='poll3_question' value='" + poll_questions[2] + "' />").insertBefore($('#Create'));
+            $('<input type="hidden" name="poll_counter" value="' + poll_counter + '"/>').insertBefore($('#Create'));
+
+            document.getElementById("event-form").submit();
+        }
+        else if (polls_valid) {
+            window.alert("Please fill all non-optional fields.");
+        }
+        else {
+            window.alert("Polls require at least 2 options");
+        }
+    }
+</script>
+<!-- Import Google Maps -->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCu3KurWBoVaFCgz3J6jjoYcnmIVY2i6B0&libraries=places&callback=initMap"></script>
+<!--Import jQuery-->
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="../../js/TweenLite.min.js"></script>
+<script src="../../js/EasePack.min.js"></script>
+<script src="../../js/rAF.js"></script>
+<script src="../../js/getstarted.js"></script>
+<script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+</script>
+<script type="text/javascript"
+        src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
+</script>
+<script type="text/javascript"
+        src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+</script>
+<script type="text/javascript"
+        src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js">
+</script>
+</body>
 </html>

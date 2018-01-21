@@ -47,58 +47,55 @@
         }
 
         function Vote(type,vote) {
+            $(document).ready(function(){
             var user_id = document.getElementById("user_id").innerHTML;
             var going_users = document.getElementById("going_ids").innerHTML;
-            var event_id = document.getElementById('event_id').innerHTML;
             var poll;
             var pollNum;
-            console.log(going_users);
-            if (going_users == "") {
-                window.alert("If you wish to vote, you must first confirm your attendance");
-            }
-            else {
-                going_users = JSON.parse('[' + going_users + ']');
-                if (search(going_users, user_id)) {
-                    if (type == "Location") {
-                        poll = LocationsPoll;
-                        pollNum = 1;
-                    }
-                    else if (type == "Date&Time") {
-                        poll = TimePoll;
-                        if (LocationUnderPoll())
-                            pollNum = 2;
-                        else pollNum = 1;
-                    }
-                    else {
-                        poll = FreePoll;
-                        pollNum = parseInt(document.getElementById('poll-counter').innerHTML);
-                    }
-                    console.log(poll);
-                    if (poll.votedUsers == undefined || !search(poll.votedUsers, user_id)) {
-                        document.getElementById('myVote').value=vote;
-                        document.getElementById('pollNum').value=pollNum;
-                        $('#poll_data').submit();
-                    }
-                    else {
-                        if (window.confirm('You have already voted for this poll. Would you like to change your vote?')) {
-                            document.getElementById('myVote').value=vote;
-                            document.getElementById('pollNum').value=pollNum;
-                            $('#poll_data').submit();
-                        }
-                    }
-
-                }
-                else {
-                    console.log("here");
+                if (going_users == "") {
                     window.alert("If you wish to vote, you must first confirm your attendance");
                 }
-            }
+                if (going_users != "") {
+                    going_users = JSON.parse('[' + going_users + ']');
+                    if (search(going_users, user_id)) {
+                        if (type == "Location") {
+                            poll = LocationsPoll;
+                            pollNum = 1;
+                        }
+                        else if (type == "Date&Time") {
+                            poll = TimePoll;
+                            if (LocationUnderPoll())
+                                pollNum = 2;
+                            else pollNum = 1;
+                        }
+                        else {
+                            poll = FreePoll;
+                            pollNum = parseInt(document.getElementById('poll-counter').innerHTML);
+                        }
+                        console.log(poll);
+                        if (poll.votedUsers == undefined || !search(poll.votedUsers, user_id)) {
+                            document.getElementById('myVote').value = vote;
+                            document.getElementById('pollNum').value = pollNum;
+                            $('#poll_data').submit();
+                        }
+                        else {
+                            if (window.confirm('You have already voted for this poll. Would you like to change your vote?')) {
+                                document.getElementById('myVote').value = vote;
+                                document.getElementById('pollNum').value = pollNum;
+                                $('#poll_data').submit();
+                            }
+                        }
 
-        }
+                    }
+                    else {
+                        window.alert("If you wish to vote, you must first confirm your attendance");
+                    }
+                }
+
+        });}
 
         function CenterMap(i) {
             var coords = LocationsPoll.options[i].option.split(" ");
-            //window.alert(coords);
             var _lat = parseFloat(coords[0].split(",")[0].substring(1));
             var _lng = parseFloat(coords[1].substring(0, coords[1].length - 1));
             var pos = {lat: _lat, lng: _lng};
@@ -136,7 +133,7 @@
                         //t.push(Math.round(Math.random()*10));
                         t.push(LocationsPoll.options[j].votes);
                         t.push(getRandomColor());
-                        t.push(CreateTooltip(j, "Location",addresses[j]));
+                        t.push(CreateTooltip(j, "Location",LocationsPoll.options[j].option));
                         addr.push(t);
                     }
                     PollChart(addr, 'Location');
@@ -151,7 +148,7 @@
                     t.push(TimePoll.options[j].option);
                     t.push(TimePoll.options[j].votes);
                     t.push(getRandomColor());
-                    t.push(CreateTooltip(j, "Time&Date",TimePoll.options[j].option));
+                    t.push(CreateTooltip(j, "Date&Time",TimePoll.options[j].option));
                     tabledata.push(t);
                 }
                 i++;
@@ -166,7 +163,7 @@
             }
             if (parseInt(document.getElementById('poll-counter').innerHTML) > i) {
                 $('<a id="free-poll">Open-question poll ongoing.Click here to view.</a>').insertBefore($('#close-chart'));
-                var tabledata = [];
+                var tabledata2 = [];
                 FreePoll = JSON.parse(document.getElementById('polls').innerHTML)[i];
                 for (var j = 0; j < FreePoll.options.length; j++) {
                     var t = [];
@@ -174,11 +171,11 @@
                     t.push(FreePoll.options[j].votes);
                     t.push(getRandomColor());
                     t.push(CreateTooltip(j, "Other",FreePoll.options[j].option));
-                    tabledata.push(t);
+                    tabledata2.push(t);
                 }
                 i++;
                 $('#free-poll').click(function () {
-                    PollChart(tabledata, 'Other');
+                    PollChart(tabledata2, 'Other');
                     ShowPollResults();
                 });
             }
@@ -519,10 +516,10 @@
                         <p id="event_id" style="display:none"><%= event_id %>
 
                         <form id="poll_data" action="/eventMe/vote/<%= user_id%>" method="POST" style="display:none">
-                            <input name="user_id" value=<%=user_id%> />
-                            <input name="event_id" value=<%=event_id%> />
-                            <input name="pollNum" id="pollNum"/>
-                            <input name="myVote" id="myVote"/>
+                            <input style="display:none" name="user_id" value=<%=user_id%> />
+                            <input style="display:none" name="eventId" value=<%=event_id%> />
+                            <input style="display:none" name="pollNum" id="pollNum"/>
+                            <input style="display:none" name="myVote" id="myVote"/>
                         </form>
 
 

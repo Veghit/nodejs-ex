@@ -13,9 +13,10 @@ function getList(){
         }
     });
     for (var listIndex = 2; listIndex < myList.length; listIndex++) {
-        var tmpDistance = readyForDistance(myList[listIndex]["Distance"]);
-        myList[listIndex]["Distance"] = tmpDistance;
-
+        if (myList[listIndex]["Distance"] !== "") {
+            var tmpDistance = readyForDistance(myList[listIndex]["Distance"]);
+            myList[listIndex]["Distance"] = tmpDistance;
+        }
     }
     return myList;
 }
@@ -68,7 +69,7 @@ function displayarrange() {
     }
     for (var listIndextmpsec = 0; listIndextmpsec < newArrangeList.length; listIndextmpsec++) {
         if (typeof(newArrangeList[listIndextmpsec]["Distance"]) === 'number') {
-            newArrangeList[listIndextmpsec]["Distance"] = newArrangeList[listIndextmpsec]["Distance"];
+            newArrangeList[listIndextmpsec]["Distance"] = newArrangeList[listIndextmpsec]["Distance"] + 'km';
         }
     }
     $("#excelDataTable tr").remove();
@@ -80,17 +81,25 @@ function displaytime() {
     var time = document.getElementById("time").value;
     var myCurrentList = [];
     var x = (date + "T" + time);
-    for (var listIndex = 0; listIndex < myList.length; listIndex++) {
-        if (myList[listIndex]["Time"] == x) {
+    var splittedTime = [];
+    for (var listIndex = 2; listIndex < myList.length; listIndex++) {
+        splittedTime = myList[listIndex]["Time"].split("T");
+        if (time == "") {
+            if (splittedTime[0] == date){
+                myCurrentList.push(myList[listIndex]);
+            }
+        } else if (date == "") {
+            if (splittedTime[1] == time) {
+                myCurrentList.push(myList[listIndex]);
+            }
+        } else if (myList[listIndex]["Time"] == x) {
             myCurrentList.push(myList[listIndex]);
-
         }
     }
     if (x == "T"){
         for (var listIndex = 2; listIndex < myList.length; listIndex++) {
             myCurrentList.push(myList[listIndex]);
         }
-
     }
     $("#excelDataTable tr").remove();
     buildEventsTable('#excelDataTable', myCurrentList);
@@ -161,6 +170,18 @@ function addAllColumnHeaders(myList, selector) {
     // $(selector).append($('<caption>'+"Events"+'</caption>'));
     var columnSet = [];
     var headerTr$ = $('<tr/>');
+    var ifEmpty = ["Type", "Title", "Distance", "Time", "Owner"];
+    if (myList.length == 0) {
+        for (var i = 0; i < ifEmpty.length; i++) {
+            if (ifEmpty[i] !== "Distance"){
+                columnSet.push(ifEmpty[i]);
+                headerTr$.append($('<th/>').html(ifEmpty[i]));
+            }
+            else if (ifEmpty[i] == "Distance"){
+                headerTr$.append($('<th>' + '<button onclick="displayarrange()"  class="mybutton" ><span>Distance</span></button>' + '</th>' ));
+            }
+        }
+    }
 
     for (var i = 0; i < myList.length; i++) {
         var rowHash = myList[i];

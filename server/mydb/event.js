@@ -11,10 +11,10 @@ class  event
         this.information = information
         this.time = time
         this.invited_users = invited
-        this.going_users = []
+        this.going_users = [ownerId]
         this.ownerName = owner_name
         this.invitedName = invited_name
-        this.goingName = []
+        this.goingName = [owner_name]
         this.pollCounter = poll_counter
         this.pollArray = poll_array
     }

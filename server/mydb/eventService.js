@@ -15,6 +15,7 @@ class eventService {
                 own_user[0].created_events+=1
                 var event_id = owner_id + own_user[0].created_events
                 var friends_list_name = []
+                var active_friends_id_list = []
                 var promises = []
                 var a_promise
                 var counter = 0
@@ -29,6 +30,7 @@ class eventService {
                             console.log(friend[0].f_name)
                             console.log(counter)
                             friends_list_name[counter] = (friend[0].f_name)
+                            active_friends_id_list[counter] = (friend[0].fb_id)
                             console.log('friends_list_name[counter] = ', friends_list_name[counter])
                             counter++
                         }
@@ -54,7 +56,7 @@ class eventService {
 
                 Promise.all(promises).then(_=>{
                     console.log('addOpenEvent - all promises came back')
-                    let new_event = new Event(event_id, owner_id, title, location, type, info, time, own_user[0].friends_list, own_user[0].f_name, friends_list_name,body['poll_counter'],polls)
+                    let new_event = new Event(event_id, owner_id, title, location, type, info, time, active_friends_id_list, own_user[0].f_name, friends_list_name,body['poll_counter'],polls)
                     console.log('the new event is:')
                     console.log(new_event)
                     eventDAO.create_event(new_event)
