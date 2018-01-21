@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Examples for creative website header animations using Canvas and JavaScript" />
-    <meta name="keywords" content="header, canvas, animated, creative, inspiration, javascript" />
-    <meta name="author" content="Codrops" />
+    <meta name="description" content="Examples for creative website header animations using Canvas and JavaScript"/>
+    <meta name="keywords" content="header, canvas, animated, creative, inspiration, javascript"/>
+    <meta name="author" content="Codrops"/>
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../../css/normalize.css" />
-    <link rel="stylesheet" type="text/css" href="../../css/component.css" />
-    <link href='http://fonts.googleapis.com/css?family=Raleway:200,400,800|Clicker+Script' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../../css/normalize.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/component.css"/>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:200,400,800|Clicker+Script' rel='stylesheet'
+          type='text/css'>
     <link rel="stylesheet" type="text/css" href="../../css"/>
     <link href="../../js"/>
     <link href="../../mydb"/>
@@ -30,9 +31,10 @@
             display: none; /* Hidden by default */
 
         }
+
         /* Modal Content */
         .modal-content {
-            background-color: rgba(0,0,0,0);
+            background-color: rgba(0, 0, 0, 0);
             margin: auto;
             padding: 20px;
             border: 1px solid #888;
@@ -60,16 +62,16 @@
 <!-- Facebook Initialization -->
 <div id="fb-root"></div>
 <script>
-    FBLogin=function(){
-        window.fbAsyncInit = function() {
+    FBLogin = function () {
+        window.fbAsyncInit = function () {
             FB.init({
-                appId            : '420752561660679',
-                autoLogAppEvents : true,
-                xfbml            : true,
-                version          : 'v2.11'
+                appId: '420752561660679',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v2.11'
             });
-            FB.login(function(response){
-                if(response.authResponse) {
+            FB.login(function (response) {
+                if (response.authResponse) {
                     var fb_id;
                     var name;
                     var friend_list;
@@ -93,19 +95,31 @@
                         });
                         FBFriends.then(function (result) {
                             friend_list = JSON.stringify(result.data);
-                                document.getElementsByName("friend_list")[0].value = friend_list;
+                            document.getElementsByName("friend_list")[0].value = friend_list;
                             var Location = new Promise(function (resolve, reject) {
-                                $.getJSON("http://freegeoip.net/json/", function(data) {
-                                    /*var country_code = data.country_code;
-                                    var country = data.country_name;
-                                    var ip = data.ip;
-                                    var time_zone = data.time_zone;*/
-                                    var latitude = data.latitude;
-                                    var longitude = data.longitude;
+                                if (navigator.geolocation) {
+                                    navigator.geolocation.getCurrentPosition(function (position) {
+                                        var pos = {
+                                            lat: position.coords.latitude,
+                                            lng: position.coords.longitude
+                                        };
+                                        resolve(JSON.stringify(pos));
+                                    });
+                                }
+                                else reject();
 
-                                    var location={lat: latitude,lng:longitude};
-                                    resolve(JSON.stringify(location));
-                                });
+
+                                // $.getJSON("http://freegeoip.net/json/", function(data) {
+                                //     /*var country_code = data.country_code;
+                                //     var country = data.country_name;
+                                //     var ip = data.ip;
+                                //     var time_zone = data.time_zone;*/
+                                //     var latitude = data.latitude;
+                                //     var longitude = data.longitude;
+                                //
+                                //     var location={lat: latitude,lng:longitude};
+                                //     resolve(JSON.stringify(location));
+                                // });
                             });
                             Location.then(function (result) {
                                 location = result;
@@ -113,9 +127,8 @@
                                 //document.getElementsByName("location")[0].value = '('+location.lat+','+location.lng);
                                 document.getElementById("user_info").submit();
                             });
-                            Location.catch(function()
-                            {
-                               window.alert('Error fetching your location');
+                            Location.catch(function () {
+                                window.alert('Error fetching your location');
                             });
 
                         });
@@ -124,20 +137,24 @@
                 else {
                     window.alert("Login cancelled");
                 }
-            },{scope:'user_friends'});
+            }, {scope: 'user_friends'});
         };
 
-        (function(d, s, id){
+        (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
             js.src = "https://connect.facebook.net/en_US/sdk.js";
             fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk')); }</script>
+        }(document, 'script', 'facebook-jssdk'));
+    }</script>
 <!-- Import JQuery  -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $("#cb").click(function () {
                 $("#fb_login").toggle(this.checked);
             }
@@ -153,23 +170,25 @@
             <button id="myBtn" class="main-title">Get Started</button>
 
 
-
-                        <!-- Modal content-->
-                        <div class="modal-content" id="myModal" style="background-color:White;">
-                            <div class="modal-body">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <a id="fb_login" style="display: none; width: 100%;" onclick="return FBLogin()"><img src="../../img/FB_login.png"></a>
-                                <form action="">
-                                    <label class="checkbox-inline" style="width: 150px"><input id="cb" style="width: 20px" type="checkbox" value="">Share My Location</label>
-                                </form>
-                                <form id="user_info" action="/eventMe/newUser" method="POST">
-                                    <input type="hidden" name="fb_id"/>
-                                    <input type="hidden" name="f_name"/>
-                                    <input type="hidden" name="friend_list"/>
-                                    <input type="hidden" name="location"/>
-                                </form>
-                            </div>
-                        </div>
+            <!-- Modal content-->
+            <div class="modal-content" id="myModal" style="background-color:White;">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <a id="fb_login" style="display: none; width: 100%;" onclick="return FBLogin()"><img
+                                src="../../img/FB_login.png"></a>
+                    <form action="">
+                        <label class="checkbox-inline" style="width: 150px"><input id="cb" style="width: 20px"
+                                                                                   type="checkbox" value="">Share My
+                            Location</label>
+                    </form>
+                    <form id="user_info" action="/eventMe/newUser" method="POST">
+                        <input type="hidden" name="fb_id"/>
+                        <input type="hidden" name="f_name"/>
+                        <input type="hidden" name="friend_list"/>
+                        <input type="hidden" name="location"/>
+                    </form>
+                </div>
+            </div>
 
             <script>
                 // Get the modal
@@ -182,17 +201,17 @@
                 var span = document.getElementsByClassName("close")[0];
 
                 // When the user clicks the button, open the modal
-                btn.onclick = function() {
+                btn.onclick = function () {
                     modal.style.display = "block";
                 }
 
                 // When the user clicks on <span> (x), close the modal
-                span.onclick = function() {
+                span.onclick = function () {
                     modal.style.display = "none";
                 }
 
                 // When the user clicks anywhere outside of the modal, close it
-                window.onclick = function(event) {
+                window.onclick = function (event) {
                     if (event.target == modal) {
                         modal.style.display = "none";
                     }
