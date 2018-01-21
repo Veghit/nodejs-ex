@@ -353,115 +353,118 @@
 
             // ------ GET CURRENT LOCATION ------
             var Location = new Promise(function (resolve, reject) {
-                $.getJSON("http://freegeoip.net/json/", function (data) {
-                    /*var country_code = data.country_code;
-                    var country = data.country_name;
-                    var ip = data.ip;
-                    var time_zone = data.time_zone;*/
-                    var latitude = data.latitude;
-                    var longitude = data.longitude;
-
-                    var location = {lat: latitude, lng: longitude};
-                    resolve(location);
-                });
-            });
-            Location.then(function (result) {
-                //Adjust map
-                map.setCenter(result);
-                if (!LocationPollCheck()) {
-                    marker.setPosition(result);
-                    marker.setMap(map);
-                    location_no_poll.value = "(" + result.lat + ", " + result.lng + ')';
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        var pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        resolve(JSON.stringify(pos));
+                    });
                 }
-                google.maps.event.trigger(map, "resize");
+                else reject();
             });
-            //-------------- CHANGE LOCATION ON CLICK ------
-            google.maps.event.addListener(map, 'click', function (event) {
-                var loc = event.latLng;
-                if (!LocationPollCheck()) {
-                    marker.setPosition(loc);
-                    marker.setMap(map);
-                    location_no_poll.value = loc;
-                    for (i = 0; i < markers.length; i++) {
-                        markers[i].setMap(null);
+        });
+        Location.then(function (result) {
+            //Adjust map
+            map.setCenter(result);
+            if (!LocationPollCheck()) {
+                marker.setPosition(result);
+                marker.setMap(map);
+                location_no_poll.value = "(" + result.lat + ", " + result.lng + ')';
+            }
+            google.maps.event.trigger(map, "resize");
+        });
+        //-------------- CHANGE LOCATION ON CLICK ------
+        google.maps.event.addListener(map, 'click', function (event) {
+            var loc = event.latLng;
+            if (!LocationPollCheck()) {
+                marker.setPosition(loc);
+                marker.setMap(map);
+                location_no_poll.value = loc;
+                for (i = 0; i < markers.length; i++) {
+                    markers[i].setMap(null);
+                }
+                location_poll = [];
+            }
+            else {
+                if (window.confirm('Choose this location?')) {
+                    if (markers.length > 16)
+                        window.alert('You have reached maximal number of locations');
+                    else {
+                        var newMarker = new google.maps.Marker({
+                            position: loc,
+                            map: map,
+                            icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
+                        });
+                        markers.push(newMarker);
+                        marker.setMap(null);
+                        location_no_poll.value = "";
+                        location_poll.push(loc + " ");
                     }
-                    location_poll = [];
                 }
-                else {
+            }
+            map.setCenter(loc);
+            google.maps.event.trigger(map, "resize");
+        });
+
+        //-------------- SEARCH BAR HANDLING --------------------
+        //--response to user choice--
+        //var markers = [];
+        searchBox.addListener('places_changed', function () {
+            var places = searchBox.getPlaces();
+            if (places.length == 0) {
+                return;
+            }
+            //get details of each place
+            var bounds = new google.maps.LatLngBounds();
+            places.forEach(function (place) {
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
+                // Create a marker for each place.
+                if (LocationPollCheck()) {
                     if (window.confirm('Choose this location?')) {
                         if (markers.length > 16)
                             window.alert('You have reached maximal number of locations');
                         else {
-                            var newMarker = new google.maps.Marker({
-                                position: loc,
+                            markers.push(new google.maps.Marker({
                                 map: map,
                                 icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
-                            });
-                            markers.push(newMarker);
+                                title: place.name,
+                                position: place.geometry.location
+
+                            }));
                             marker.setMap(null);
+                            location_poll.push(place.geometry.location + " ");
                             location_no_poll.value = "";
-                            location_poll.push(loc + " ");
                         }
                     }
                 }
-                map.setCenter(loc);
-                google.maps.event.trigger(map, "resize");
-            });
-
-            //-------------- SEARCH BAR HANDLING --------------------
-            //--response to user choice--
-            //var markers = [];
-            searchBox.addListener('places_changed', function () {
-                var places = searchBox.getPlaces();
-                if (places.length == 0) {
-                    return;
+                else {
+                    marker.setPosition(place.geometry.location);
+                    marker.setMap(map);
+                    location_no_poll.value = place.geometry.location;
+                    location_poll.value = "";
+                    for (i = 0; i < markers.length; i++) {
+                        markers[i].setMap(null);
+                    }
                 }
-                //get details of each place
-                var bounds = new google.maps.LatLngBounds();
-                places.forEach(function (place) {
-                    if (!place.geometry) {
-                        console.log("Returned place contains no geometry");
-                        return;
-                    }
-                    // Create a marker for each place.
-                    if (LocationPollCheck()) {
-                        if (window.confirm('Choose this location?')) {
-                            if (markers.length > 16)
-                                window.alert('You have reached maximal number of locations');
-                            else {
-                                markers.push(new google.maps.Marker({
-                                    map: map,
-                                    icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
-                                    title: place.name,
-                                    position: place.geometry.location
-
-                                }));
-                                marker.setMap(null);
-                                location_poll.push(place.geometry.location + " ");
-                                location_no_poll.value = "";
-                            }
-                        }
-                    }
-                    else {
-                        marker.setPosition(place.geometry.location);
-                        marker.setMap(map);
-                        location_no_poll.value = place.geometry.location;
-                        location_poll.value = "";
-                        for (i = 0; i < markers.length; i++) {
-                            markers[i].setMap(null);
-                        }
-                    }
-                    map.setCenter(place.geometry.location);
-                    if (place.geometry.viewport) {
-                        // Only geocodes have viewport.
-                        bounds.union(place.geometry.viewport);
-                    } else {
-                        bounds.extend(place.geometry.location);
-                    }
-                });
-                map.fitBounds(bounds);
+                map.setCenter(place.geometry.location);
+                if (place.geometry.viewport) {
+                    // Only geocodes have viewport.
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
             });
+            map.fitBounds(bounds);
         });
+    }
+
+    )
+    ;
     }
 
     function handleLocationError() {
@@ -502,7 +505,7 @@
                     but.value = 'Add more options!';
                     but.id = 'add-options';
                     $('#time-options').append(but);
-                    document.getElementById('event-time').value="";
+                    document.getElementById('event-time').value = "";
                     AddDateAndTime();
                 }
             })
