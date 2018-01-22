@@ -134,6 +134,14 @@ router.post('/newUser', (req, res) => {
                 if (user.length > 0) {
                     console.log('user is already in the db, updating location and redirecting to frontpage');
                     user[0].current_location = location
+                    var friends_id_only=[]
+                    console.log(friend_list)
+                    var counter
+                    for(counter = 0; counter < friend_list.length ; counter++)
+                    {
+                        friends_id_only[counter] = friend_list[counter].id
+                    }
+                    user[0].friends_list = friends_id_only;
                     us.update_user(user[0])
                         .then(_ => {
                             res.redirect(frontpage);
