@@ -335,7 +335,7 @@
                 var marker = new google.maps.Marker({
                     position: default_location,
                     map: null,
-                    icon: 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569'
+                    icon: '//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569'
                 });
                 if (!LocationPollCheck()) {
                     marker.setMap(map);
@@ -394,7 +394,7 @@
                                 var newMarker = new google.maps.Marker({
                                     position: loc,
                                     map: map,
-                                    icon: 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
+                                    icon: '//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
                                 });
                                 markers.push(newMarker);
                                 marker.setMap(null);
@@ -430,7 +430,7 @@
                                 else {
                                     markers.push(new google.maps.Marker({
                                         map: map,
-                                        icon: 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
+                                        icon: '//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
                                         title: place.name,
                                         position: place.geometry.location
 
@@ -713,24 +713,24 @@
 </script>
 <!-- Import Google Maps -->
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCu3KurWBoVaFCgz3J6jjoYcnmIVY2i6B0&libraries=places&callback=initMap"></script>
+        src="//maps.googleapis.com/maps/api/js?key=AIzaSyCu3KurWBoVaFCgz3J6jjoYcnmIVY2i6B0&libraries=places&callback=initMap"></script>
 <!--Import jQuery-->
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="../../js/TweenLite.min.js"></script>
 <script src="../../js/EasePack.min.js"></script>
 <script src="../../js/rAF.js"></script>
 <script src="../../js/getstarted.js"></script>
 <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+        src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
 </script>
 <script type="text/javascript"
-        src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
+        src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
 </script>
 <script type="text/javascript"
-        src="https://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+        src="//tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
 </script>
 <script type="text/javascript"
-        src="https://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js">
+        src="//tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js">
 </script>
 </body>
 </html>
