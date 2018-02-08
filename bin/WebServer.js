@@ -26,8 +26,9 @@ class WebServer {
          * Create HTTP WebServer.
          */
         const options = {
-            key: fs.readFileSync('keys/key.pem'),
-            cert: fs.readFileSync('keys/cert.pem')
+            key: fs.readFileSync('keys/private.key'),
+            cert: fs.readFileSync('keys/certificate.crt'),
+            ca: fs.readFileSync('keys/ca_bundle.crt'),
         };
 
         server = https.createServer(options,app);
